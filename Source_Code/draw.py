@@ -1,4 +1,11 @@
 import pygame
+from .palette import COLORS
+from .player import Player
 
-def draw_game(screen):
-    screen.fill((30,30,30))
+class Renderer:
+    def __init__(self, screen: pygame.Surface) -> None:
+        self.screen = screen
+
+    def draw_game(self, player: Player) -> None:
+        self.screen.fill(COLORS.bg)
+        player.draw(self.screen)

@@ -1,8 +1,7 @@
 from __future__ import annotations
 
-from dataclasses import dataclass, field
-
-from Source_Code.draw import draw_game
+from .draw import Renderer
+from .player import Player
 
 import pygame
 
@@ -15,24 +14,21 @@ class Game:
 
     def __init__(self) -> None:
         self.screen = pygame.display.set_mode((self.SCREEN_W, self.SCREEN_H))
-        self.font = pygame.font.SysFont(None, 22)
-        self.big_font = pygame.font.SysFont(None, 40)
 
         self.screen_rect = pygame.Rect(0, 0, self.SCREEN_W, self.SCREEN_H)
-        self.playfield = pygame.Rect(
-            self.PADDING,
-            self.HUD_H + self.PADDING,
-            self.SCREEN_W - 2 * self.PADDING,
-            self.SCREEN_H - self.HUD_H - 2 * self.PADDING,
-        )
+        self.running = True
+        self.player = Player(self.SCREEN_W, self.SCREEN_H)
+        self.renderer = Renderer(self.screen)
     
-    def handle_event(self, event):
+    def handle_event(self, event: pygame.event.Event) -> None:
         for event in pygame.event.get():
-            if event.type == pygame.QUIT():
+            if event.type == pygame.QUIT:
+                self.running = False
+            if event.type == pygame.KEYDOWN and event_key == pygame.K_ESCAPE:
                 self.running = False
     
-    def update(self, dt: float):
-        pass
+    def update(self, dt: float) -> None:
+        self.player.update(dt)
 
-    def draw(self):
-        draw_game(self.screen)
+    def draw(self)-> None:
+        self.renderer.draw_game(self.player)
