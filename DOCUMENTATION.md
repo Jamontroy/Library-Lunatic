@@ -81,5 +81,5 @@ COLORS.shelf_green  - green shelf for green books
 COLORS.shelf_blue   - blue shelf (you guessed it blue books)
 COLORS.text        - main text color this is a bright white we can change later to whatever
 COLORS.subtle      - secondary text color like a grayer color can also change to whatever
-COLORS.hud_timer_ok  - timer color when plenty of time (Just an idea I had to have color change based on time left on lock can add later or whatever)
+COLORS.hud_timer_ok  - timer color when plenty of time (Just an idea I had to have color change based on time left on lock can add later)
 COLORS.hud_timer_low - timer color when running out of time (red)
