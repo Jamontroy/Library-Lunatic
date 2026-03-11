@@ -8,18 +8,13 @@ def main() -> None:
     pygame.display.set_caption("Library Lunatic")
 
     clock = pygame.time.Clock()
-    running = True
-
     game = Game()
 
-    while running:
+    while game.running:
         dt = clock.tick(60) / 1000.0
         dt = min(dt, 0.05)
 
         for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                running = False
-                break
             game.handle_event(event)
 
         game.update(dt)

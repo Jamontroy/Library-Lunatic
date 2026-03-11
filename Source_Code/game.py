@@ -21,11 +21,10 @@ class Game:
         self.renderer = Renderer(self.screen)
     
     def handle_event(self, event: pygame.event.Event) -> None:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                self.running = False
-            if event.type == pygame.KEYDOWN and event_key == pygame.K_ESCAPE:
-                self.running = False
+        if event.type == pygame.QUIT:
+            self.running = False
+        if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+            self.running = False
     
     def update(self, dt: float) -> None:
         self.player.update(dt)
