@@ -1,4 +1,6 @@
 import pygame
+
+from . import books
 from .palette import COLORS
 from .player import Player
 from .bookshelves import Bookshelves
@@ -11,4 +13,3 @@ class Renderer:
         self.screen.fill(COLORS.bg)
         player.draw(self.screen)
         bookshelves.draw(self.screen)
-        

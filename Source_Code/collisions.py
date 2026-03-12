@@ -2,7 +2,7 @@ import pygame
 
 from .player import Player
 from .bookshelves import Bookshelves
-
+from .books import Book
 class Collisions: 
 
     def player_shelf_col(self, player: pygame.Rect, bookshelf: pygame.Rect) -> None:
@@ -31,7 +31,33 @@ class Collisions:
 
         player.pos.update(player.rect.center)
 
-    def update(self, player: Player, bookshelves: Bookshelves) -> None:
+    def book_bs_col(self, book: Book, bookshelves: Bookshelves) -> bool: # consolidates shelf collisions
+        return (
+            book.rect.colliderect(bookshelves.bkshlf1) or
+            book.rect.colliderect(bookshelves.bkshlf2) or
+            book.rect.colliderect(bookshelves.bkshlf3) or
+            book.rect.colliderect(bookshelves.bkshlf4) or
+            book.rect.colliderect(bookshelves.bkshlf5) or
+            book.rect.colliderect(bookshelves.bkshlf6) or
+            book.rect.colliderect(bookshelves.bkshlf7) or
+            book.rect.colliderect(bookshelves.bkshlf8) or
+            book.rect.colliderect(bookshelves.bkshlf9) or
+            book.rect.colliderect(bookshelves.bkshlf10) or
+            book.rect.colliderect(bookshelves.bkshlf11) or
+            book.rect.colliderect(bookshelves.bkshlf12)
+        )
+
+    def player_book_col(self, player: Player, book: Book) -> int: # tracks whether the player is in contact with a book
+        if not player.rect.colliderect(book.rect):
+            return 0
+        else:
+            book.kill()
+            return 1
+
+
+    # I changed the type hinting to int for the purposes of adding to the "carrying" value in game
+    def update(self, player: Player, bookshelves: Bookshelves, books: pygame.sprite.Group) -> int:
+        score_add = 0
         self.player_shelf_col(player, bookshelves.bkshlf1)
         self.player_shelf_col(player, bookshelves.bkshlf2)
         self.player_shelf_col(player, bookshelves.bkshlf3)
@@ -44,3 +70,7 @@ class Collisions:
         self.player_shelf_col(player, bookshelves.bkshlf10)
         self.player_shelf_col(player, bookshelves.bkshlf11)
         self.player_shelf_col(player, bookshelves.bkshlf12)
+
+        for book in list(books):
+            score_add += self.player_book_col(player, book)
+        return score_add
