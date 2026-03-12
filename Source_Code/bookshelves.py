@@ -1,6 +1,7 @@
 import pygame
 
 from .palette import COLORS
+# from .player import Player
 
 class Bookshelves:
 
@@ -13,6 +14,10 @@ class Bookshelves:
         
         self.bkshlf5 = pygame.Rect(200, 800, 80, 200)
         self.bkshlf6 = pygame.Rect(600, 800, 80, 200)
+
+    #def update(self, dt: float) -> None:
+        #This is where the collision code will likely go
+        #In addition to probably having to update the player collision as well
 
     def draw(self, surface: pygame.Surface) -> None:
         pygame.draw.rect(surface, COLORS.shelf_brown, self.bkshlf1)

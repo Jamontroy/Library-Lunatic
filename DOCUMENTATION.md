@@ -104,6 +104,9 @@ The player class contains all of the movement and drawing for the player box. Th
     - draw
         - has the draw code the the player rectange.
 
+## bookshelves.py
+    I'll fill this out when its more fleshed out.
+
 ## books.py
 Contains the Book class.
 
