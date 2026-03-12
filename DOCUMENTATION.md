@@ -74,6 +74,11 @@ It currently has the 4 basic method of
 - update() now counts the timer down each frame with self.timer -= dt
 - draw() now calls self.hud.draw() to render the HUD on screen
 
+- state
+    - "playing" = game is running
+    - "gameover" = timer hit 0, shows game over screen with overlay
+    - Press Space to restart from gameover
+
 ## draw.py
 
 - Class Renderer
