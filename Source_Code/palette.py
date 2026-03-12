@@ -6,7 +6,7 @@ import pygame
 @dataclass 
 class Palette:
     bg: tuple[int, int, int] = (22, 24, 28)
-
+    panel: pygame.Color = field(default_factory=lambda: pygame.Color("#2a303c"))
     # Sprites
     player: tuple[int, int, int] = (136, 192, 208)
     wall: pygame.Color = field(default_factory=lambda: pygame.Color("#4c566a"))
