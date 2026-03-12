@@ -3,6 +3,8 @@ import pygame
 from .player import Player
 from .bookshelves import Bookshelves
 from .books import Book
+from .hud import HUD
+
 class Collisions: 
 
     def player_shelf_col(self, player: pygame.Rect, bookshelf: pygame.Rect) -> None:
@@ -64,6 +66,14 @@ class Collisions:
             book.rect.colliderect(bookshelves.bkshlf12)
         )
 
+    def hud_collision(self, player: Player, hud: HUD) -> None:
+        if not player.rect.colliderect(hud.rect):
+            return
+
+        player.rect.top = hud.rect.bottom
+        player.velocity.y = 0
+        player.pos.update(player.rect.center)
+
     def player_book_col(self, player: Player, book: Book) -> None: # tracks whether the player is in contact with a book
         if not player.rect.colliderect(book.rect):
             return
@@ -75,7 +85,7 @@ class Collisions:
 
 
     # I changed the type hinting to int for the purposes of adding to the "carrying" value in game
-    def update(self, player: Player, bookshelves: Bookshelves, books: pygame.sprite.Group) -> int:
+    def update(self, player: Player, bookshelves: Bookshelves, books: pygame.sprite.Group, hud: HUD) -> int:
         score_add = 0
         self.player_shelf_col(player, bookshelves.bkshlf1)
         self.player_shelf_col(player, bookshelves.bkshlf2)
@@ -89,6 +99,8 @@ class Collisions:
         self.player_shelf_col(player, bookshelves.bkshlf10)
         self.player_shelf_col(player, bookshelves.bkshlf11)
         self.player_shelf_col(player, bookshelves.bkshlf12)
+
+        self.hud_collision(player, hud)
 
         for tag, shelf in bookshelves.color_tag.items():
             score_add += self.book_dropoff_col(player, shelf, tag)

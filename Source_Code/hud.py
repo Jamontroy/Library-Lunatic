@@ -8,6 +8,7 @@ class HUD:
         self.screen = screen
         self.screen_w = screen_w
         self.font = pygame.font.SysFont(None, 22)
+        self.rect = pygame.Rect(0, 0, screen_w, 56)
  
     def _draw_text(self, text, pos, color):
         s = self.font.render(text, True, color)

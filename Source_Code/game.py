@@ -63,7 +63,7 @@ class Game:
             if self.bspawn_timer >= 5:
                 self.try_book_spawn()
                 self.bspawn_timer = 0.0
-            self.player.score += self.collisions.update(self.player, self.bookshelves, self.books) # updated collisions
+            self.player.score += self.collisions.update(self.player, self.bookshelves, self.books, self.hud)
 
     '''
      I added this as a simple book spawner, however this definitely can change later depending on
