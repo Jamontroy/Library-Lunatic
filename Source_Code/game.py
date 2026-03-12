@@ -11,7 +11,7 @@ import pygame
 class Game:
     fps = 60
 
-    SCREEN_W, SCREEN_H = 900, 1200 
+    SCREEN_W, SCREEN_H = 600, 800 
     HUD_H = 56
     PADDING = 12
 

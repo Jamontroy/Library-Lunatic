@@ -4,15 +4,15 @@ from .palette import COLORS
 #I made this player movement based on the example code frow week 2, the structure and format of how it works is very similar
 
 class Player:
-    SPEED = 720.0 #These 4 attributes at the top make it super easy to change the feel of the game when we get deeper into testing
+    SPEED = 360.0 #These 4 attributes at the top make it super easy to change the feel of the game when we get deeper into testing
     ACCEL = 4800.0 # This is what I think felt best for right now but obviously we will tweak it the more we test.
-    FRICTION = 25.0
+    FRICTION = 50.0
     STOP_THRESHOLD = 20.0
 
     def __init__(self, SCREEN_W: int, SCREEN_H: int) -> None:
         self.w = SCREEN_W
         self.h = SCREEN_H
-        self.rect = pygame.Rect(self.w // 2 - 16, self.h // 2 - 16, 32, 32)
+        self.rect = pygame.Rect(self.w // 2 - 16, self.h // 2 - 16, 16, 16)
         self.pos = pygame.Vector2(self.rect.center)
         self.velocity = pygame.Vector2(0, 0)
         self.score = 0  # tracks player score
