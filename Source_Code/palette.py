@@ -30,8 +30,9 @@ class Palette:
     book_red: pygame.Color = field(default_factory=lambda: pygame.Color("#ee4343"))
     book_green: pygame.Color = field(default_factory=lambda: pygame.Color("#1E7A1E"))
     book_blue: pygame.Color = field(default_factory=lambda: pygame.Color("#8181ED"))
-
-
+    book_yellow: pygame.Color = field(default_factory=lambda: pygame.Color("#FFF275"))
+    book_purple: pygame.Color = field(default_factory=lambda: pygame.Color("#C77DFF"))
+    book_orange: pygame.Color = field(default_factory=lambda: pygame.Color("#FF8C42"))
 
     # HUD accents idea for future maybe red timer when low, green when ok
     hud_timer_ok:  pygame.Color = field(default_factory=lambda: pygame.Color("#a3be8c"))
@@ -46,4 +47,7 @@ BOOK_TYPES = {
     "red":   (COLORS.book_red, COLORS.shelf_red),
     "green": (COLORS.book_green, COLORS.shelf_green),
     "blue": (COLORS.book_blue, COLORS.shelf_blue), 
+    "yellow": (COLORS.book_yellow, COLORS.shelf_yellow),
+    "purple": (COLORS.book_purple, COLORS.shelf_purple),
+    "orange": (COLORS.book_orange, COLORS.shelf_orange), 
 }
