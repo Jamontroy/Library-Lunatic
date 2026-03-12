@@ -52,6 +52,58 @@ Of course this isn't an exhaustive list but I hope it helps to illustrate a litt
 
 # Actual Documentation
 
+## game.py
+Is made to be a compilation of all of the classes to run the game
+
+It currently has the 4 basic method of
+- __init__
+    - Initializes the screen, the Player, the Draw class, and updates running to True
+- handle_event()
+    - handle_event is reading singular events that are happening while the game is played.
+    - So it has conditional to respond based on those events
+    - If the user pressed escape we want to set self.running to False to kill the game.
+- update()
+    - Will run all of the individual update methods from the other classes to keep it clean
+    - self.player.update(dt) - runs the player.update method
+- draw
+    - runs the draw method from Renderer
+
+## draw.py
+
+- Class Renderer
+    - initializes the screen
+    - takes the draw methods from other classes such as player and combines them into Renderer
+
+## player.py
+
+- Class player
+The player class contains all of the movement and drawing for the player box. The movement currently is based off of the week 2 example with easily changable feel variables at the top of the file.
+    - variables(SPEED, ACCEL, FRICTION, STOP_THRESHOLD)
+    - __init__
+        - self.rect creates a rect in the center of the screen
+        - self.pos gets the center position for self.rect
+        - self.velocity is initialized
+        - * Note the point of Vector2 is to have a placehold for x and y that can be computed at the same time. Its essentially an object holding both the x and y values.
+    - read_direction
+        - This section is is that actual key to movement with normalization.
+        - returns as a Vector2 with x and y
+        - if direction key pressed move to corresponding direction
+        - normalize the direction so that it does not do the 1.4x on diagonals
+    - update
+        - this section is mostly updating movement based on the absense or presence of keystrokes
+        - velocity = direction times acceleration times dt
+        - friction is only applied when there is no key press
+        - There is a STOP_THRESHOLD to completely stop the player if their velocity is less than 20
+        - There is a conditional to make sure velocity doesn't go above SPEED
+
+        - Move Code
+            - changes pos based on where the players velocity
+            - right after that it changes the rect.center to the new center of the rectange based on thew updated pos
+            - It then checks if the rectangle is on an edge and clamps it if it is.
+            and if that is the case pos is updated
+    - draw
+        - has the draw code the the player rectange.
+
 ## books.py
 Contains the Book class.
 
