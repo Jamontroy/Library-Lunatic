@@ -106,8 +106,10 @@ class Game:
             small_font = pygame.font.SysFont(None, 32)
             s = big_font.render("Library Lunatic", True, COLORS.text)
             self.screen.blit(s, (self.SCREEN_W // 2 - s.get_width() // 2, self.SCREEN_H // 2 - 40))
-            r = small_font.render("Collect Books and Take them to their shelves", True, COLORS.subtle)
+            r = small_font.render("Collect books and take them to their shelves", True, COLORS.subtle)
             self.screen.blit(r, (self.SCREEN_W // 2 - r.get_width() // 2, self.SCREEN_H // 2 + 20))
             r = small_font.render("Press Space to Begin", True, COLORS.subtle)
             self.screen.blit(r, (self.SCREEN_W // 2 - r.get_width() // 2, self.SCREEN_H // 2 + 80))
+            r = small_font.render("Control with WASD or ARROW keys", True, COLORS.subtle)
+            self.screen.blit(r, (self.SCREEN_W // 2 - r.get_width() // 2, self.SCREEN_H // 2 + 120))
 
