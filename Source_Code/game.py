@@ -37,7 +37,7 @@ class Game:
     
     def handle_event(self, event: pygame.event.Event) -> None:
         if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
-            if self.state == "gameover" or "start":
+            if self.state == "gameover" or self.state == "start":
                 self.state = "playing"
                 self.timer = 60.0
                 self.carrying = 0
