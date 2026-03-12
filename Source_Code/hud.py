@@ -9,6 +9,7 @@ class HUD:
         self.screen_w = screen_w
         self.font = pygame.font.SysFont(None, 22)
         self.rect = pygame.Rect(0, 0, screen_w, 56)
+
  
     def _draw_text(self, text, pos, color):
         s = self.font.render(text, True, color)
@@ -21,6 +22,7 @@ class HUD:
         # Timer turns red when low
         if timer > 10:
             timer_color = COLORS.hud_timer_ok
+            
         else:
             timer_color = COLORS.hud_timer_low
  

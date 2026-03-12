@@ -8,7 +8,10 @@ from .hud import HUD
 class Collisions: 
 
     def __init__(self) -> None:
-        self.sfx_bookDrop = pygame.mixer.Sound("Audio/BookDropOff.wav") #Added
+        self.sfx_bookDrop = pygame.mixer.Sound("Audio/BookDropOff.wav")
+        self.sfx_bookDrop.set_volume(2)
+        self.sfx_bookPickup = pygame.mixer.Sound("Audio/bookPickup.mp3")
+        self.sfx_bookPickup.set_volume(0.5)
 
     def player_shelf_col(self, player: pygame.Rect, bookshelf: pygame.Rect) -> None:
         if not player.rect.colliderect(bookshelf):
@@ -85,6 +88,7 @@ class Collisions:
             return
         else:
             player.bookscarried.append(book) # adds book to player's "inventory"
+            self.sfx_bookPickup.play()
             book.kill() # despawns book from game
 
 

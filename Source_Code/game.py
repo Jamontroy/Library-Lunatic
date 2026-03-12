@@ -34,6 +34,8 @@ class Game:
         self.collisions = Collisions()
         self.carrying = 0
         self.books = pygame.sprite.Group() # to track books
+        self.sfx_music = pygame.mixer.Sound("Audio/music.wav")
+        self.sfx_music.set_volume(0.15)
     
     def handle_event(self, event: pygame.event.Event) -> None:
         if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
@@ -43,6 +45,7 @@ class Game:
                 self.carrying = 0
                 self.books.empty()
                 self.player = Player(self.SCREEN_W, self.SCREEN_H)
+                self.sfx_music.play(-1)
         if event.type == pygame.QUIT:
             self.running = False
         if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
@@ -54,10 +57,12 @@ class Game:
             return
         if self.state == "playing":
             self.player.update(dt)
+            
             self.carrying = len(self.player.bookscarried) # uses the length of the list of books to see how many are carried
             self.timer -= dt
             if self.timer <= 0:
                 self.timer = 0
+                self.sfx_music.stop()
                 self.state = "gameover"
             self.bspawn_timer += dt #
             if self.bspawn_timer >= 3:
