@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from .draw import Renderer
 from .player import Player
+from .bookshelves import Bookshelves
 
 import pygame
 
@@ -18,6 +19,7 @@ class Game:
         self.screen_rect = pygame.Rect(0, 0, self.SCREEN_W, self.SCREEN_H)
         self.running = True
         self.player = Player(self.SCREEN_W, self.SCREEN_H)
+        self.bookshelves = Bookshelves()
         self.renderer = Renderer(self.screen)
     
     def handle_event(self, event: pygame.event.Event) -> None:
@@ -30,4 +32,4 @@ class Game:
         self.player.update(dt)
 
     def draw(self)-> None:
-        self.renderer.draw_game(self.player)
+        self.renderer.draw_game(self.player, self.bookshelves)

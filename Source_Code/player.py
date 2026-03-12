@@ -4,7 +4,7 @@ from .palette import COLORS
 #I made this player movement based on the example code frow week 2, the structure and format of how it works is very similar
 
 class Player:
-    SPEED = 360.0 #These 4 attributes at the top make it super easy to change the feel of the game when we get deeper into testing
+    SPEED = 720.0 #These 4 attributes at the top make it super easy to change the feel of the game when we get deeper into testing
     ACCEL = 4800.0 # This is what I think felt best for right now but obviously we will tweak it the more we test.
     FRICTION = 25.0
     STOP_THRESHOLD = 20.0
