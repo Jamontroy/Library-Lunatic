@@ -71,12 +71,12 @@ class Game:
     '''
     def try_book_spawn(self) -> None:
         x = random.randint(0, self.SCREEN_W)
-        y = random.randint(0, self.SCREEN_H)
+        y = random.randint(Game.HUD_H, self.SCREEN_H)
         t = random.choice(list(BOOK_TYPES.keys()))
         new_book = Book(center =(x, y), tag = (t))
         while self.collisions.book_bs_col(new_book, self.bookshelves):
             x = random.randint(0, self.SCREEN_W)
-            y = random.randint(0, self.SCREEN_H)
+            y = random.randint(Game.HUD_H, self.SCREEN_H)
             new_book.rect.center = (x, y)
         self.books.add(new_book)
 
