@@ -5,6 +5,7 @@ from .player import Player
 from .bookshelves import Bookshelves
 from .collisions import Collisions
 from .hud import HUD
+from .books import Book
 
 import pygame
 
@@ -26,6 +27,7 @@ class Game:
         self.timer = 60.0 # added for timer
         self.hud = HUD(self.screen, self.SCREEN_W) # added for hud
         self.collisions = Collisions()
+        self.book = Book(self.SCREEN_W, self.SCREEN_H)
     
     def handle_event(self, event: pygame.event.Event) -> None:
         if event.type == pygame.QUIT:
@@ -40,6 +42,6 @@ class Game:
         Collisions()
 
     def draw(self)-> None:
-        self.renderer.draw_game(self.player, self.bookshelves)
+        self.renderer.draw_game(self.player, self.bookshelves, self.book)
         # Draw the HUD with the current timer score and number of books being carried
         self.hud.draw(self.timer, self.player.score, 0) #0 is a placeholder for carrying for now

@@ -44,3 +44,6 @@ class Collisions:
         self.player_shelf_col(player, bookshelves.bkshlf10)
         self.player_shelf_col(player, bookshelves.bkshlf11)
         self.player_shelf_col(player, bookshelves.bkshlf12)
+        self.player_shelf_col(player, bookshelves.bkshlf13)
+        self.player_shelf_col(player, bookshelves.bkshlf14)
+        self.player_shelf_col(player, bookshelves.bkshlf15)
