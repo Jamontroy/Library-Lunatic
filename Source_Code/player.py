@@ -15,6 +15,7 @@ class Player:
         self.rect = pygame.Rect(self.w // 2 - 16, self.h // 2 - 16, 32, 32)
         self.pos = pygame.Vector2(self.rect.center)
         self.velocity = pygame.Vector2(0, 0)
+        self.score = 0  # tracks player score
 
     def read_direction(self) -> pygame.Vector2:
         keys = pygame.key.get_pressed()
