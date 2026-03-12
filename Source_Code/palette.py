@@ -19,7 +19,7 @@ class Palette:
     # Books theres one color per shelf/book type
     shelf_red: pygame.Color = field(default_factory=lambda: pygame.Color("#ee4343"))
     shelf_green: pygame.Color = field(default_factory=lambda: pygame.Color("#1E7A1E"))
-    shelf_blue: pygame.Color = field(default_factory=lambda: pygame.Color("#8181ED"))
+    shelf_blue: pygame.Color = field(default_factory=lambda: pygame.Color("#4169E1"))
     shelf_yellow: pygame.Color = field(default_factory=lambda: pygame.Color("#FFF275"))
     shelf_purple: pygame.Color = field(default_factory=lambda: pygame.Color("#C77DFF"))
     shelf_orange: pygame.Color = field(default_factory=lambda: pygame.Color("#FF8C42"))
@@ -29,7 +29,7 @@ class Palette:
     # Shelves matched to book color
     book_red: pygame.Color = field(default_factory=lambda: pygame.Color("#ee4343"))
     book_green: pygame.Color = field(default_factory=lambda: pygame.Color("#1E7A1E"))
-    book_blue: pygame.Color = field(default_factory=lambda: pygame.Color("#8181ED"))
+    book_blue: pygame.Color = field(default_factory=lambda: pygame.Color("#4169E1"))
     book_yellow: pygame.Color = field(default_factory=lambda: pygame.Color("#FFF275"))
     book_purple: pygame.Color = field(default_factory=lambda: pygame.Color("#C77DFF"))
     book_orange: pygame.Color = field(default_factory=lambda: pygame.Color("#FF8C42"))
