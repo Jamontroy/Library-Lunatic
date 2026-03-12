@@ -68,6 +68,12 @@ It currently has the 4 basic method of
 - draw
     - runs the draw method from Renderer
 
+
+- Added self.timer = 60.0 to track time remaining
+- Added self.hud = HUD(self.screen, self.SCREEN_W) to initialize the HUD
+- update() now counts the timer down each frame with self.timer -= dt
+- draw() now calls self.hud.draw() to render the HUD on screen
+
 ## draw.py
 
 - Class Renderer
@@ -106,6 +112,21 @@ The player class contains all of the movement and drawing for the player box. Th
 
 ## bookshelves.py
     I'll fill this out when its more fleshed out.
+
+## hud.py
+Contains the HUD class which draws the display at the top of the screen.
+
+- Class HUD
+    - __init__
+        - takes screen and screen_w to know where to position text
+        - sets up the font used for all HUD text
+    - _draw_text
+        -  method to avoid repeating render and blit every time we draw text
+    - draw
+        - draws the HUD panel at the top of the screen
+        - Score shown in the top left
+        - Timer shown in the top center, turns red when under 10 seconds testing this now sure if we will like it
+        - Carrying count shown in the top right
 
 ## books.py
 Contains the Book class.
