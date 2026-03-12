@@ -60,7 +60,7 @@ class Game:
                 self.timer = 0
                 self.state = "gameover"
             self.bspawn_timer += dt #
-            if self.bspawn_timer >= 5:
+            if self.bspawn_timer >= 3:
                 self.try_book_spawn()
                 self.bspawn_timer = 0.0
             self.player.score += self.collisions.update(self.player, self.bookshelves, self.books, self.hud)
