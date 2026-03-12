@@ -28,7 +28,7 @@ class Game:
         self.bookshelves = Bookshelves()
         self.renderer = Renderer(self.screen)
         self.timer = 60.0 # added for timer
-        self.state = "playing"  # for lose screen
+        self.state = "start"  # for lose screen
         self.bspawn_timer = 0.0 # timer that tracks time in between book spawning times
         self.hud = HUD(self.screen, self.SCREEN_W) # added for hud
         self.collisions = Collisions()
@@ -37,7 +37,7 @@ class Game:
     
     def handle_event(self, event: pygame.event.Event) -> None:
         if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
-            if self.state == "gameover":
+            if self.state == "gameover" or "start":
                 self.state = "playing"
                 self.timer = 60.0
                 self.carrying = 0
@@ -52,17 +52,18 @@ class Game:
     def update(self, dt: float) -> None:
         if self.state == "gameover":
             return
-        self.player.update(dt)
-        self.carrying = len(self.player.bookscarried) # uses the length of the list of books to see how many are carried
-        self.timer -= dt
-        if self.timer <= 0:
-            self.timer = 0
-            self.state = "gameover"
-        self.bspawn_timer += dt #
-        if self.bspawn_timer >= 5:
-            self.try_book_spawn()
-            self.bspawn_timer = 0.0
-        self.player.score += self.collisions.update(self.player, self.bookshelves, self.books) # updated collisions
+        if self.state == "playing":
+            self.player.update(dt)
+            self.carrying = len(self.player.bookscarried) # uses the length of the list of books to see how many are carried
+            self.timer -= dt
+            if self.timer <= 0:
+                self.timer = 0
+                self.state = "gameover"
+            self.bspawn_timer += dt #
+            if self.bspawn_timer >= 5:
+                self.try_book_spawn()
+                self.bspawn_timer = 0.0
+            self.player.score += self.collisions.update(self.player, self.bookshelves, self.books) # updated collisions
 
     '''
      I added this as a simple book spawner, however this definitely can change later depending on
@@ -97,3 +98,16 @@ class Game:
             self.screen.blit(s, (self.SCREEN_W // 2 - s.get_width() // 2, self.SCREEN_H // 2 - 40))
             r = small_font.render("Press Space to play again", True, COLORS.subtle)
             self.screen.blit(r, (self.SCREEN_W // 2 - r.get_width() // 2, self.SCREEN_H // 2 + 20))
+        if self.state == "start":
+            overlay = pygame.Surface((self.SCREEN_W, self.SCREEN_H), pygame.SRCALPHA)
+            overlay.fill((0, 0, 0, 150))
+            self.screen.blit(overlay, (0, 0))
+            big_font = pygame.font.SysFont(None, 64)
+            small_font = pygame.font.SysFont(None, 32)
+            s = big_font.render("Library Lunatic", True, COLORS.text)
+            self.screen.blit(s, (self.SCREEN_W // 2 - s.get_width() // 2, self.SCREEN_H // 2 - 40))
+            r = small_font.render("Collect Books and Take them to their shelves", True, COLORS.subtle)
+            self.screen.blit(r, (self.SCREEN_W // 2 - r.get_width() // 2, self.SCREEN_H // 2 + 20))
+            r = small_font.render("Press Space to Begin", True, COLORS.subtle)
+            self.screen.blit(r, (self.SCREEN_W // 2 - r.get_width() // 2, self.SCREEN_H // 2 + 80))
+
