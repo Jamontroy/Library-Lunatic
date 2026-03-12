@@ -1,10 +1,10 @@
 from __future__ import annotations
 
 import random
-from .palette import BOOK_TYPES, COLORS
+
 from .books import Book
 from .draw import Renderer
-from .palette import BOOK_TYPES
+from .palette import BOOK_TYPES, COLORS
 from .player import Player
 from .bookshelves import Bookshelves
 from .collisions import Collisions
@@ -27,19 +27,15 @@ class Game:
         self.player = Player(self.SCREEN_W, self.SCREEN_H)
         self.bookshelves = Bookshelves()
         self.renderer = Renderer(self.screen)
-        self.state = "playing" # for lose screen
         self.timer = 60.0 # added for timer
+        self.state = "playing"  # for lose screen
         self.bspawn_timer = 0.0 # timer that tracks time in between book spawning times
         self.hud = HUD(self.screen, self.SCREEN_W) # added for hud
         self.collisions = Collisions()
+        self.carrying = 0
         self.books = pygame.sprite.Group() # to track books
-        self.carrying = 0 # to track how many the player currently has
     
     def handle_event(self, event: pygame.event.Event) -> None:
-        if event.type == pygame.QUIT:
-            self.running = False
-        if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
-            self.running = False
         if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
             if self.state == "gameover":
                 self.state = "playing"
@@ -47,11 +43,17 @@ class Game:
                 self.carrying = 0
                 self.books.empty()
                 self.player = Player(self.SCREEN_W, self.SCREEN_H)
-    
+        if event.type == pygame.QUIT:
+            self.running = False
+        if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+            self.running = False
+
+
     def update(self, dt: float) -> None:
         if self.state == "gameover":
             return
         self.player.update(dt)
+        self.carrying = len(self.player.bookscarried) # uses the length of the list of books to see how many are carried
         self.timer -= dt
         if self.timer <= 0:
             self.timer = 0
@@ -60,7 +62,7 @@ class Game:
         if self.bspawn_timer >= 5:
             self.try_book_spawn()
             self.bspawn_timer = 0.0
-        self.carrying += self.collisions.update(self.player, self.bookshelves, self.books)
+        self.player.score += self.collisions.update(self.player, self.bookshelves, self.books) # updated collisions
 
     '''
      I added this as a simple book spawner, however this definitely can change later depending on
@@ -80,11 +82,11 @@ class Game:
 
     def draw(self)-> None:
         self.renderer.draw_game(self.player, self.bookshelves)
-        # Draw the hud with the current timer score and number of books being carried
+        # Draw the HUD with the current timer score and number of books being carried
         for book in self.books: # draws books on screen
             book.draw(self.screen)
         self.hud.draw(self.timer, self.player.score, self.carrying) #0 is a placeholder for carrying for now
-          # Draw game over screen on top of everything
+        # Draw game over screen on top of everything
         if self.state == "gameover":
             overlay = pygame.Surface((self.SCREEN_W, self.SCREEN_H), pygame.SRCALPHA)
             overlay.fill((0, 0, 0, 150))

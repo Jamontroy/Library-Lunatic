@@ -31,6 +31,23 @@ class Collisions:
 
         player.pos.update(player.rect.center)
 
+
+    '''
+    this deals with the part of the player-shelf collision when the player has the correct book. It passes
+    the number of books dropped off and removes them from the player list.
+    '''
+    def book_dropoff_col(self, player: Player, bookshelf: pygame.Rect, tag: str) -> int:
+        dropped = 0
+        if not player.rect.colliderect(bookshelf):
+            return dropped
+        else:
+            for book in list(player.bookscarried):
+                if book.tag == tag:
+                    dropped += 1
+                    player.bookscarried.remove(book)
+            return dropped
+
+
     def book_bs_col(self, book: Book, bookshelves: Bookshelves) -> bool: # consolidates shelf collisions
         return (
             book.rect.colliderect(bookshelves.bkshlf1) or
@@ -47,12 +64,14 @@ class Collisions:
             book.rect.colliderect(bookshelves.bkshlf12)
         )
 
-    def player_book_col(self, player: Player, book: Book) -> int: # tracks whether the player is in contact with a book
+    def player_book_col(self, player: Player, book: Book) -> None: # tracks whether the player is in contact with a book
         if not player.rect.colliderect(book.rect):
-            return 0
+            return
+        if len(player.bookscarried) >= 3: # player cannot have more than three books. will change to a variable amount later
+            return
         else:
-            book.kill()
-            return 1
+            player.bookscarried.append(book) # adds book to player's "inventory"
+            book.kill() # despawns book from game
 
 
     # I changed the type hinting to int for the purposes of adding to the "carrying" value in game
@@ -71,6 +90,10 @@ class Collisions:
         self.player_shelf_col(player, bookshelves.bkshlf11)
         self.player_shelf_col(player, bookshelves.bkshlf12)
 
+        for tag, shelf in bookshelves.color_tag.items():
+            score_add += self.book_dropoff_col(player, shelf, tag)
+
         for book in list(books):
-            score_add += self.player_book_col(player, book)
+            self.player_book_col(player, book)
+
         return score_add

@@ -16,6 +16,7 @@ class Player:
         self.pos = pygame.Vector2(self.rect.center)
         self.velocity = pygame.Vector2(0, 0)
         self.score = 0  # tracks player score
+        self.bookscarried = []
 
     def read_direction(self) -> pygame.Vector2:
         keys = pygame.key.get_pressed()
