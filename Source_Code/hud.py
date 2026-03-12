@@ -9,7 +9,8 @@ class HUD:
         self.screen_w = screen_w
         self.font = pygame.font.SysFont(None, 22)
         self.rect = pygame.Rect(0, 0, screen_w, 56)
-
+        self.threebooks = []
+        self.threeboxes = pygame.sprite.Group();
  
     def _draw_text(self, text, pos, color):
         s = self.font.render(text, True, color)
@@ -22,7 +23,6 @@ class HUD:
         # Timer turns red when low
         if timer > 10:
             timer_color = COLORS.hud_timer_ok
-            
         else:
             timer_color = COLORS.hud_timer_low
  
@@ -34,5 +34,19 @@ class HUD:
         self.screen.blit(s, (self.screen_w // 2 - s.get_width() // 2, 10))
  
         # Carrying top right
-        self._draw_text(f"Carrying: {carrying}/3", (self.screen_w - 120, 10), COLORS.text)
- 
+        self._draw_text(f"Carrying: {carrying}/3", (self.screen_w - 210, 10), COLORS.text)
+
+        colorString = "Book Types: "
+        color1 = ""
+        color2 = ""
+        color3 = ""
+        for i in self.threebooks:
+            j = self.threebooks.index(i)
+            if j == 0:
+                color1 = i.tag
+            elif j == 1:
+                color2 = ", " + i.tag
+            elif j == 2:
+                color3 = ", " + i.tag
+        colorString = colorString + color1 + color2 + color3
+        self._draw_text(colorString, (self.screen_w - 210, 30), COLORS.text)

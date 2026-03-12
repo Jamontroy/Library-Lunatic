@@ -44,7 +44,7 @@ class Collisions:
     this deals with the part of the player-shelf collision when the player has the correct book. It passes
     the number of books dropped off and removes them from the player list.
     '''
-    def book_dropoff_col(self, player: Player, bookshelf: pygame.Rect, tag: str) -> int:
+    def book_dropoff_col(self, player: Player, bookshelf: pygame.Rect, hud: HUD, tag: str) -> int:
         dropped = 0
         if not player.rect.colliderect(bookshelf):
             return dropped
@@ -54,6 +54,7 @@ class Collisions:
                     dropped += 1
                     self.sfx_bookDrop.play()
                     player.bookscarried.remove(book)
+                    hud.threebooks.remove(book)
             return dropped
 
 
@@ -81,13 +82,14 @@ class Collisions:
         player.velocity.y = 0
         player.pos.update(player.rect.center)
 
-    def player_book_col(self, player: Player, book: Book) -> None: # tracks whether the player is in contact with a book
+    def player_book_col(self, player: Player, book: Book, hud: HUD) -> None: # tracks whether the player is in contact with a book
         if not player.rect.colliderect(book.rect):
             return
         if len(player.bookscarried) >= 3: # player cannot have more than three books. will change to a variable amount later
             return
         else:
             player.bookscarried.append(book) # adds book to player's "inventory"
+            hud.threebooks.append(book)
             self.sfx_bookPickup.play()
             book.kill() # despawns book from game
 
@@ -111,9 +113,9 @@ class Collisions:
         self.hud_collision(player, hud)
 
         for tag, shelf in bookshelves.color_tag.items():
-            score_add += self.book_dropoff_col(player, shelf, tag)
+            score_add += self.book_dropoff_col(player, shelf, hud, tag)
 
         for book in list(books):
-            self.player_book_col(player, book)
+            self.player_book_col(player, book, hud)
 
         return score_add
