@@ -12,6 +12,7 @@ from .hud import HUD
 
 import pygame
 
+
 class Game:
     fps = 60
 
