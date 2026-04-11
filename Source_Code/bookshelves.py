@@ -7,19 +7,19 @@ SCREEN_W = 600
 SCREEN_H = 800
 
 # Shelf dimensions as fractions of screen size
-SHELF_W = SCREEN_W * (50 / 600)   # ~8.3% of screen width
-SHELF_H = SCREEN_H * (160 / 800)  # 20% of screen height
-
-# 4 columns, 3 rows — evenly spaced
-# gap = (SCREEN_W - 4 * SHELF_W) / 5
-COL_GAP = (SCREEN_W - 4 * SHELF_W) / 5
-COL_X = [int(COL_GAP + col * (SHELF_W + COL_GAP)) for col in range(4)]
-
-ROW_GAP = (SCREEN_H - 3 * SHELF_H) / 4
-ROW_Y = [int(ROW_GAP + row * (SHELF_H + ROW_GAP)) for row in range(3)]
+SHELF_W = SCREEN_W * (40 / 600)   # ~8.3% of screen width
+SHELF_H = SCREEN_H * (140 / 800)  # 20% of screen height
 
 SW, SH = int(SHELF_W), int(SHELF_H)  # shelf width/height as ints for pygame.Rect
 
+COL_GAP = 70  # adjust to taste
+TOTAL_SHELF_W = 4 * SW + 3 * COL_GAP
+COL_START = (SCREEN_W - TOTAL_SHELF_W) // 2
+COL_X = [COL_START + col * (SW + COL_GAP) for col in range(4)]
+
+ROW_START = 160  # px from top of screen
+ROW_GAP = 60     # gap between rows, adjust this to taste
+ROW_Y = [ROW_START + row * (SH + ROW_GAP) for row in range(3)]
 
 class Bookshelves:
 
@@ -31,6 +31,14 @@ class Bookshelves:
     """
 
     def __init__(self) -> None:
+        self.bkshlf_sprite = pygame.transform.scale((pygame.image.load("Assets/BasicBookshelf.png").convert_alpha()), (SW, SH))
+        self.bkshlf_blue_sprite = pygame.transform.scale((pygame.image.load("Assets/BlueBookshelf.png").convert_alpha()), (SW, SH))
+        self.bkshlf_green_sprite = pygame.transform.scale((pygame.image.load("Assets/GreenBookshelf.png").convert_alpha()), (SW, SH))
+        self.bkshlf_yellow_sprite = pygame.transform.scale((pygame.image.load("Assets/YellowBookshelf.png").convert_alpha()), (SW, SH))
+        self.bkshlf_purple_sprite = pygame.transform.scale((pygame.image.load("Assets/PurpleBookshelf.png").convert_alpha()), (SW, SH))
+        self.bkshlf_cream_sprite = pygame.transform.scale((pygame.image.load("Assets/CreamBookshelf.png").convert_alpha()), (SW, SH))
+        self.bkshlf_red_sprite = pygame.transform.scale((pygame.image.load("Assets/RedBookshelf.png").convert_alpha()), (SW, SH))
+
         self.bkshlf1 = pygame.Rect(COL_X[0], ROW_Y[0], SW, SH)
         self.bkshlf1_hb = self.bkshlf1.inflate(10, 10)
         self.bkshlf2 = pygame.Rect(COL_X[1], ROW_Y[0], SW, SH)
@@ -73,15 +81,15 @@ class Bookshelves:
         #In addition to probably having to update the player collision as well
 
     def draw(self, surface: pygame.Surface) -> None:
-        pygame.draw.rect(surface, COLORS.shelf_brown, self.bkshlf1)
-        pygame.draw.rect(surface, COLORS.shelf_red, self.bkshlf2)
-        pygame.draw.rect(surface, COLORS.shelf_brown, self.bkshlf3)
-        pygame.draw.rect(surface, COLORS.shelf_blue, self.bkshlf4)
-        pygame.draw.rect(surface, COLORS.shelf_yellow, self.bkshlf5)
-        pygame.draw.rect(surface, COLORS.shelf_brown, self.bkshlf6)
-        pygame.draw.rect(surface, COLORS.shelf_green, self.bkshlf7)
-        pygame.draw.rect(surface, COLORS.shelf_brown, self.bkshlf8)
-        pygame.draw.rect(surface, COLORS.shelf_brown, self.bkshlf9)
-        pygame.draw.rect(surface, COLORS.shelf_purple, self.bkshlf10)
-        pygame.draw.rect(surface, COLORS.shelf_brown, self.bkshlf11)
-        pygame.draw.rect(surface, COLORS.shelf_orange, self.bkshlf12)
+        surface.blit(self.bkshlf_sprite, self.bkshlf1)
+        surface.blit(self.bkshlf_red_sprite, self.bkshlf2)
+        surface.blit(self.bkshlf_sprite, self.bkshlf3)
+        surface.blit(self.bkshlf_blue_sprite, self.bkshlf4)
+        surface.blit(self.bkshlf_yellow_sprite, self.bkshlf5)
+        surface.blit(self.bkshlf_sprite, self.bkshlf6)
+        surface.blit(self.bkshlf_green_sprite, self.bkshlf7)
+        surface.blit(self.bkshlf_sprite, self.bkshlf8)
+        surface.blit(self.bkshlf_sprite, self.bkshlf9)
+        surface.blit(self.bkshlf_purple_sprite, self.bkshlf10)
+        surface.blit(self.bkshlf_sprite, self.bkshlf11)
+        surface.blit(self.bkshlf_cream_sprite, self.bkshlf12)
