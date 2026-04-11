@@ -103,6 +103,7 @@ class Game:
             self.screen.blit(s, (self.SCREEN_W // 2 - s.get_width() // 2, self.SCREEN_H // 2 - 40))
             r = small_font.render("Press Space to play again", True, COLORS.subtle)
             self.screen.blit(r, (self.SCREEN_W // 2 - r.get_width() // 2, self.SCREEN_H // 2 + 20))
+            
         if self.state == "start":
             overlay = pygame.Surface((self.SCREEN_W, self.SCREEN_H), pygame.SRCALPHA)
             overlay.fill((0, 0, 0, 150))

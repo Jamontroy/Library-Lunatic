@@ -20,5 +20,5 @@ class Book(pygame.sprite.Sprite):
         self.color = book_color
 
     def draw(self, surface):
-        pygame.draw.rect(surface, self.color, self.rect, border_radius=3)
-        pygame.draw.rect(surface, pygame.Color("#000000"), self.rect, 2, border_radius=3)
+        pygame.draw.rect(surface, self.color, self.rect)
+        pygame.draw.rect(surface, pygame.Color("#000000"), self.rect, 2)

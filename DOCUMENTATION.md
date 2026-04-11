@@ -159,3 +159,12 @@ All colors live in COLORS from Source_Code/palette.py
 - COLORS.subtle      - secondary text color like a grayer color can also change to whatever
 - COLORS.hud_timer_ok  - timer color when plenty of time (Just an idea I had to have color change based on time left on lock can add later)
 - COLORS.hud_timer_low - timer color when running out of time (red)
+
+## Collisions.py
+- init
+    - has the sound effects for the collision-based events initialized
+- player_shelf_col
+- book_dropoff_col
+- book_bs_col
+- hud_collision
+- update

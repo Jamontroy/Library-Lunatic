@@ -3,6 +3,24 @@ import pygame
 from .palette import COLORS
 # from .player import Player
 
+SCREEN_W = 600
+SCREEN_H = 800
+
+# Shelf dimensions as fractions of screen size
+SHELF_W = SCREEN_W * (50 / 600)   # ~8.3% of screen width
+SHELF_H = SCREEN_H * (160 / 800)  # 20% of screen height
+
+# 4 columns, 3 rows — evenly spaced
+# gap = (SCREEN_W - 4 * SHELF_W) / 5
+COL_GAP = (SCREEN_W - 4 * SHELF_W) / 5
+COL_X = [int(COL_GAP + col * (SHELF_W + COL_GAP)) for col in range(4)]
+
+ROW_GAP = (SCREEN_H - 3 * SHELF_H) / 4
+ROW_Y = [int(ROW_GAP + row * (SHELF_H + ROW_GAP)) for row in range(3)]
+
+SW, SH = int(SHELF_W), int(SHELF_H)  # shelf width/height as ints for pygame.Rect
+
+
 class Bookshelves:
 
 
@@ -13,33 +31,32 @@ class Bookshelves:
     """
 
     def __init__(self) -> None:
-        self.bkshlf1 = pygame.Rect(77, 100, 50, 160)  # Okay, I know the x values for these looks like I randomly chose them, but they are mathmatically equidistant from each other
-        self.bkshlf1_hb = self.bkshlf1.inflate(10,10) # Each shelf is 60px wide there are 4 shelves to fit evenly in 600px | 600px - 240px = 360px
-        self.bkshlf2 = pygame.Rect(209, 100, 50, 160) # Since there are 5 hall gaps, we divide 360/5 = 72
-        self.bkshlf2_hb = self.bkshlf2.inflate(10,10)
+        self.bkshlf1 = pygame.Rect(COL_X[0], ROW_Y[0], SW, SH)
+        self.bkshlf1_hb = self.bkshlf1.inflate(10, 10)
+        self.bkshlf2 = pygame.Rect(COL_X[1], ROW_Y[0], SW, SH)
+        self.bkshlf2_hb = self.bkshlf2.inflate(10, 10)
+        self.bkshlf3 = pygame.Rect(COL_X[2], ROW_Y[0], SW, SH)
+        self.bkshlf3_hb = self.bkshlf3.inflate(10, 10)
+        self.bkshlf4 = pygame.Rect(COL_X[3], ROW_Y[0], SW, SH)
+        self.bkshlf4_hb = self.bkshlf4.inflate(10, 10)
 
-        self.bkshlf3 = pygame.Rect(341, 100, 50, 160) # For each x value it after the first (72) it is previous value + 60px + 72px = 204px
-        self.bkshlf3_hb = self.bkshlf3.inflate(10,10) # It looks off but its just math ;)
-        self.bkshlf4 = pygame.Rect(473, 100, 50, 160)
-        self.bkshlf4_hb = self.bkshlf4.inflate(10,10)
+        self.bkshlf5 = pygame.Rect(COL_X[0], ROW_Y[1], SW, SH)
+        self.bkshlf5_hb = self.bkshlf5.inflate(10, 10)
+        self.bkshlf6 = pygame.Rect(COL_X[1], ROW_Y[1], SW, SH)
+        self.bkshlf6_hb = self.bkshlf6.inflate(10, 10)
+        self.bkshlf7 = pygame.Rect(COL_X[2], ROW_Y[1], SW, SH)
+        self.bkshlf7_hb = self.bkshlf7.inflate(10, 10)
+        self.bkshlf8 = pygame.Rect(COL_X[3], ROW_Y[1], SW, SH)
+        self.bkshlf8_hb = self.bkshlf8.inflate(10, 10)
 
-        self.bkshlf5 = pygame.Rect(78, 332, 50, 160)
-        self.bkshlf5_hb = self.bkshlf5.inflate(10,10) # Added in an "hb" (hitbox) rect for all the shelves for the player to collide with
-        self.bkshlf6 = pygame.Rect(209, 332, 50, 160)
-        self.bkshlf6_hb = self.bkshlf6.inflate(10,10)
-        self.bkshlf7 = pygame.Rect(341, 332, 50, 160)
-        self.bkshlf7_hb = self.bkshlf7.inflate(10,10)
-        self.bkshlf8 = pygame.Rect(473, 332, 50, 160)
-        self.bkshlf8_hb = self.bkshlf8.inflate(10,10)
-
-        self.bkshlf9 = pygame.Rect(77, 564, 50, 160)
-        self.bkshlf9_hb = self.bkshlf9.inflate(10,10)
-        self.bkshlf10 = pygame.Rect(209, 564, 50, 160)
-        self.bkshlf10_hb = self.bkshlf10.inflate(10,10)
-        self.bkshlf11 = pygame.Rect(341, 564, 50, 160)
-        self.bkshlf11_hb = self.bkshlf11.inflate(10,10)
-        self.bkshlf12 = pygame.Rect(473, 564, 50, 160)
-        self.bkshlf12_hb = self.bkshlf12.inflate(10,10)
+        self.bkshlf9 = pygame.Rect(COL_X[0], ROW_Y[2], SW, SH)
+        self.bkshlf9_hb = self.bkshlf9.inflate(10, 10)
+        self.bkshlf10 = pygame.Rect(COL_X[1], ROW_Y[2], SW, SH)
+        self.bkshlf10_hb = self.bkshlf10.inflate(10, 10)
+        self.bkshlf11 = pygame.Rect(COL_X[2], ROW_Y[2], SW, SH)
+        self.bkshlf11_hb = self.bkshlf11.inflate(10, 10)
+        self.bkshlf12 = pygame.Rect(COL_X[3], ROW_Y[2], SW, SH)
+        self.bkshlf12_hb = self.bkshlf12.inflate(10, 10)
 
         self.color_tag= { # assigns shelf hitboxes to colors
             "red": self.bkshlf2_hb,
@@ -68,5 +85,3 @@ class Bookshelves:
         pygame.draw.rect(surface, COLORS.shelf_purple, self.bkshlf10)
         pygame.draw.rect(surface, COLORS.shelf_brown, self.bkshlf11)
         pygame.draw.rect(surface, COLORS.shelf_orange, self.bkshlf12)
-        
-
