@@ -32,21 +32,33 @@ class HUD:
         # Timer top center
         s = self.font.render(f"Time: {int(timer)}", True, timer_color)
         self.screen.blit(s, (self.screen_w // 2 - s.get_width() // 2, 10))
+
+        # Timer bar under the timer text
+        bar_width = 120
+        bar_height = 8
+        bar_x = self.screen_w // 2 - bar_width // 2
+        bar_y = 32
+        fill = int((timer / 60.0) * bar_width)
+
+        if timer > 30:
+            bar_color = pygame.Color("#a3be8c")  # green
+        elif timer > 10:
+            bar_color = pygame.Color("#ebcb8b")  # yellow
+        else:
+            bar_color = pygame.Color("#bf616a")  # red
+
+        pygame.draw.rect(self.screen, pygame.Color("#4c566a"), (bar_x, bar_y, bar_width, bar_height))
+        pygame.draw.rect(self.screen, bar_color, (bar_x, bar_y, fill, bar_height))
  
         # Carrying top right
         self._draw_text(f"Carrying: {carrying}/3", (self.screen_w - 210, 10), COLORS.text)
 
-        colorString = "Book Types: "
-        color1 = ""
-        color2 = ""
-        color3 = ""
-        for i in self.threebooks:
-            j = self.threebooks.index(i)
-            if j == 0:
-                color1 = i.tag
-            elif j == 1:
-                color2 = ", " + i.tag
-            elif j == 2:
-                color3 = ", " + i.tag
-        colorString = colorString + color1 + color2 + color3
-        self._draw_text(colorString, (self.screen_w - 210, 30), COLORS.text)
+        # Draw small colored squares for carried books
+        box_size = 20
+        box_y = 28
+        box_start_x = self.screen_w - 210
+        for i in range(len(self.threebooks)):
+            book = self.threebooks[i]
+            box_rect = pygame.Rect(box_start_x + i * (box_size + 6), box_y, box_size, box_size)
+            pygame.draw.rect(self.screen, book.color, box_rect)
+            pygame.draw.rect(self.screen, pygame.Color("#000000"), box_rect, 2)
