@@ -70,7 +70,7 @@ class Game:
                 self.sfx_music.stop()
                 self.state = "gameover"
             self.bspawn_timer += dt #
-            if self.bspawn_timer >= 3:
+            if self.bspawn_timer >= 3.00:
                 self.try_book_spawn()
                 self.try_powerup_spawn()
                 self.try_bookmark_spawn()
@@ -93,27 +93,29 @@ class Game:
     how we choose to implement book spawning conditions (conveyor belt, patrons dropping, etc.)
     '''
     def try_book_spawn(self) -> None:
-        x = random.randint(0, self.SCREEN_W)
-        y = random.randint(Game.HUD_H, self.SCREEN_H)
+        BORDER = 50
+        x = random.randint(BORDER, self.SCREEN_W - BORDER)
+        y = random.randint(BORDER + 80, self.SCREEN_H - BORDER)
         t = random.choice(list(BOOK_TYPES.keys()))
         new_book = Book(center =(x, y), tag = (t))
         while self.collisions.book_bs_col(new_book, self.bookshelves):
-            x = random.randint(0, self.SCREEN_W)
-            y = random.randint(Game.HUD_H, self.SCREEN_H)
+            x = random.randint(BORDER, self.SCREEN_W - BORDER)
+            y = random.randint(BORDER + 80, self.SCREEN_H - BORDER)
             new_book.rect.center = (x, y)
         self.books.add(new_book)
 
     def try_powerup_spawn(self) -> None:
         if len(self.powerups) > 0:  # only one powerup on screen at a time
             return
-        if random.random() > 0.20:  # 20% chance to spawn when called
+        if random.random() > 0.2:  # 20% chance to spawn when called
             return
-        x = random.randint(0, self.SCREEN_W)
-        y = random.randint(Game.HUD_H, self.SCREEN_H)
+        BORDER = 50
+        x = random.randint(BORDER, self.SCREEN_W - BORDER)
+        y = random.randint(BORDER + 80, self.SCREEN_H - BORDER)
         new_powerup = Powerup(center=(x, y))
         while self.collisions.book_bs_col(new_powerup, self.bookshelves):
-            x = random.randint(0, self.SCREEN_W)
-            y = random.randint(Game.HUD_H, self.SCREEN_H)
+            x = random.randint(BORDER, self.SCREEN_W - BORDER)
+            y = random.randint(BORDER + 80, self.SCREEN_H - BORDER)
             new_powerup.rect.center = (x, y)
         self.powerups.add(new_powerup)
     
@@ -122,12 +124,13 @@ class Game:
             return
         if random.random() > 0.15:  # 15% chance to spawn when called
             return
-        x = random.randint(0, self.SCREEN_W)
-        y = random.randint(Game.HUD_H, self.SCREEN_H)
+        BORDER = 50
+        x = random.randint(BORDER, self.SCREEN_W - BORDER)
+        y = random.randint(BORDER + 80, self.SCREEN_H - BORDER)
         new_bookmark = Bookmark(center=(x, y))
         while self.collisions.book_bs_col(new_bookmark, self.bookshelves):
-            x = random.randint(0, self.SCREEN_W)
-            y = random.randint(Game.HUD_H, self.SCREEN_H)
+            x = random.randint(BORDER, self.SCREEN_W - BORDER)
+            y = random.randint(BORDER + 80, self.SCREEN_H - BORDER)
             new_bookmark.rect.center = (x, y)
         self.bookmarks.add(new_bookmark)
 

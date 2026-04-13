@@ -6,8 +6,8 @@ from .palette import COLORS
 NUM_FRAMES = 4  # change this to however many frames each direction has
 
 class Player:
-    SPEED = 300.0 #These 4 attributes at the top make it super easy to change the feel of the game when we get deeper into testing
-    BOOSTED_SPEED = 500.0
+    SPEED = 250.0 #These 4 attributes at the top make it super easy to change the feel of the game when we get deeper into testing
+    BOOSTED_SPEED = 375.0
     ACCEL = 4800.0 # This is what I think felt best for right now but obviously we will tweak it the more we test.
     FRICTION = 100.0
     STOP_THRESHOLD = 20.0
@@ -112,7 +112,8 @@ class Player:
         # Move Code
         self.pos += self.velocity * dt
         self.rect.center = (int(self.pos.x), int(self.pos.y))
-        self.rect.clamp_ip(pygame.Rect(0, 0, self.w, self.h))
+        BORDER = 45   #added this to stop player from going through new border 
+        self.rect.clamp_ip(pygame.Rect(BORDER, BORDER + 56, self.w - BORDER * 2, self.h - (BORDER * 2) - 56))
         self.pos.update(self.rect.center)
 
     def draw(self, surface: pygame.Surface) -> None:
