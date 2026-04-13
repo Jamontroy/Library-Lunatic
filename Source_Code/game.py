@@ -47,6 +47,7 @@ class Game:
                 self.carrying = 0
                 self.books.empty()
                 self.powerups.empty()
+                self.hud.threebooks.clear()
                 self.player = Player(self.SCREEN_W, self.SCREEN_H)
                 self.sfx_music.play(-1)
         if event.type == pygame.QUIT:
