@@ -9,8 +9,7 @@ from .player import Player
 from .bookshelves import Bookshelves
 from .collisions import Collisions
 from .hud import HUD
-from .powerup import Powerup
-
+from .powerup import Powerup, Bookmark
 import pygame
 
 class Game:
@@ -36,6 +35,7 @@ class Game:
         self.carrying = 0
         self.books = pygame.sprite.Group() # to track books
         self.powerups = pygame.sprite.Group()
+        self.bookmarks = pygame.sprite.Group()
         self.sfx_music = pygame.mixer.Sound("Audio/music.wav")
         self.sfx_music.set_volume(0.15)
     
@@ -47,6 +47,7 @@ class Game:
                 self.carrying = 0
                 self.books.empty()
                 self.powerups.empty()
+                self.bookmarks.empty()
                 self.hud.threebooks.clear()
                 self.player = Player(self.SCREEN_W, self.SCREEN_H)
                 self.sfx_music.play(-1)
@@ -72,12 +73,20 @@ class Game:
             if self.bspawn_timer >= 3:
                 self.try_book_spawn()
                 self.try_powerup_spawn()
+                self.try_bookmark_spawn()
                 self.bspawn_timer = 0.0
-            for powerup in list(self.powerups):
+            for powerup in list(self.powerups): #speed boost
                 if self.player.rect.colliderect(powerup.rect):
                     self.player.boost_timer = self.player.BOOST_DURATION
                     powerup.kill()
-            self.player.score += self.collisions.update(self.player, self.bookshelves, self.books, self.hud)
+            for bookmark in list(self.bookmarks):#2x points
+                if self.player.rect.colliderect(bookmark.rect):
+                    self.player.score_boost_timer = self.player.SCORE_BOOST_DURATION
+                    bookmark.kill()
+            score_gained = self.collisions.update(self.player, self.bookshelves, self.books, self.hud)
+            if self.player.score_boost_timer > 0:
+                score_gained *= self.player.SCORE_MULTIPLIER
+            self.player.score += score_gained  # was self.player.score += self.collisions.update before bookmark
 
     '''
      I added this as a simple book spawner, however this definitely can change later depending on
@@ -107,6 +116,20 @@ class Game:
             y = random.randint(Game.HUD_H, self.SCREEN_H)
             new_powerup.rect.center = (x, y)
         self.powerups.add(new_powerup)
+    
+    def try_bookmark_spawn(self) -> None:
+        if len(self.bookmarks) > 0:  # only one bookmark on screen at a time
+            return
+        if random.random() > 0.15:  # 15% chance to spawn when called
+            return
+        x = random.randint(0, self.SCREEN_W)
+        y = random.randint(Game.HUD_H, self.SCREEN_H)
+        new_bookmark = Bookmark(center=(x, y))
+        while self.collisions.book_bs_col(new_bookmark, self.bookshelves):
+            x = random.randint(0, self.SCREEN_W)
+            y = random.randint(Game.HUD_H, self.SCREEN_H)
+            new_bookmark.rect.center = (x, y)
+        self.bookmarks.add(new_bookmark)
 
 
     def draw(self)-> None:
@@ -116,6 +139,8 @@ class Game:
             book.draw(self.screen)
         for powerup in self.powerups:
             powerup.draw(self.screen)
+        for bookmark in self.bookmarks:
+            bookmark.draw(self.screen)
         self.hud.draw(self.timer, self.player.score, self.carrying) #0 is a placeholder for carrying for now
         # Draw game over screen on top of everything
         if self.state == "gameover":

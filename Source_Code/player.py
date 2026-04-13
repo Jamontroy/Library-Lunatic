@@ -12,6 +12,8 @@ class Player:
     FRICTION = 100.0
     STOP_THRESHOLD = 20.0
     BOOST_DURATION = 5.0  # seconds the boost lasts
+    SCORE_BOOST_DURATION = 5.0  # seconds the score multiplier lasts
+    SCORE_MULTIPLIER = 2        # how much the score is multiplied
 
     def __init__(self, SCREEN_W: int, SCREEN_H: int) -> None:
         self.w = SCREEN_W
@@ -22,6 +24,7 @@ class Player:
         self.score = 0  # tracks player score
         self.bookscarried = []
         self.boost_timer = 0.0  # tracks how long boost has left
+        self.score_boost_timer = 0.0  # tracks how long score boost has left
 
         self.playeranimations = {
             "up":    [pygame.image.load(f"Assets/PlayerAnim/PlayerUp{i}.png").convert_alpha()    for i in range(1, 4)],
@@ -100,6 +103,9 @@ class Player:
             top_speed = self.BOOSTED_SPEED
         else:
             top_speed = self.SPEED
+        
+        if self.score_boost_timer > 0: # count down score boost 
+            self.score_boost_timer -= dt
 
         if self.velocity.length() > top_speed:
             self.velocity.scale_to_length(top_speed)
