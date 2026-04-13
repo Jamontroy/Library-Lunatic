@@ -7,9 +7,11 @@ NUM_FRAMES = 4  # change this to however many frames each direction has
 
 class Player:
     SPEED = 300.0 #These 4 attributes at the top make it super easy to change the feel of the game when we get deeper into testing
+    BOOSTED_SPEED = 500.0
     ACCEL = 4800.0 # This is what I think felt best for right now but obviously we will tweak it the more we test.
     FRICTION = 100.0
     STOP_THRESHOLD = 20.0
+    BOOST_DURATION = 5.0  # seconds the boost lasts
 
     def __init__(self, SCREEN_W: int, SCREEN_H: int) -> None:
         self.w = SCREEN_W
@@ -19,6 +21,7 @@ class Player:
         self.velocity = pygame.Vector2(0, 0)
         self.score = 0  # tracks player score
         self.bookscarried = []
+        self.boost_timer = 0.0  # tracks how long boost has left
 
         self.playeranimations = {
             "up":    [pygame.image.load(f"Assets/PlayerAnim/PlayerUp{i}.png").convert_alpha()    for i in range(1, 4)],
@@ -92,9 +95,14 @@ class Player:
             self.velocity.update(0, 0)
 
         # Makes sure that the velocity does go beyond the capped op speed
-        if self.velocity.length() > self.SPEED:
-            self.velocity.scale_to_length(self.SPEED)
+        if self.boost_timer > 0:
+            self.boost_timer -= dt
+            top_speed = self.BOOSTED_SPEED
+        else:
+            top_speed = self.SPEED
 
+        if self.velocity.length() > top_speed:
+            self.velocity.scale_to_length(top_speed)
         # Move Code
         self.pos += self.velocity * dt
         self.rect.center = (int(self.pos.x), int(self.pos.y))
