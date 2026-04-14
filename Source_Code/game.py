@@ -106,7 +106,7 @@ class Game:
     how we choose to implement book spawning conditions (conveyor belt, patrons dropping, etc.)
     '''
     def try_book_spawn(self) -> None:
-        BORDER = 50
+        BORDER = 70
         x = random.randint(BORDER, self.SCREEN_W - BORDER)
         y = random.randint(BORDER + 80, self.SCREEN_H - BORDER)
         t = random.choice(list(BOOK_TYPES.keys()))
@@ -122,7 +122,7 @@ class Game:
             return
         if random.random() > 0.1:  # 20% chance to spawn when called
             return
-        BORDER = 50
+        BORDER = 70
         x = random.randint(BORDER, self.SCREEN_W - BORDER)
         y = random.randint(BORDER + 80, self.SCREEN_H - BORDER)
         new_powerup = Powerup(center=(x, y))
