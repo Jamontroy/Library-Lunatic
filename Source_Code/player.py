@@ -7,13 +7,14 @@ NUM_FRAMES = 4  # change this to however many frames each direction has
 
 class Player:
     SPEED = 250.0 #These 4 attributes at the top make it super easy to change the feel of the game when we get deeper into testing
-    BOOSTED_SPEED = 375.0
+    BOOSTED_SPEED = 350.0
     ACCEL = 4800.0 # This is what I think felt best for right now but obviously we will tweak it the more we test.
     FRICTION = 100.0
     STOP_THRESHOLD = 20.0
     BOOST_DURATION = 5.0  # seconds the boost lasts
     SCORE_BOOST_DURATION = 5.0  # seconds the score multiplier lasts
     SCORE_MULTIPLIER = 2        # how much the score is multiplied
+    FREEZE_DURATION = 5.0  # seconds the timer freeze lasts
 
     def __init__(self, SCREEN_W: int, SCREEN_H: int) -> None:
         self.w = SCREEN_W
@@ -25,6 +26,7 @@ class Player:
         self.bookscarried = []
         self.boost_timer = 0.0  # tracks how long boost has left
         self.score_boost_timer = 0.0  # tracks how long score boost has left
+        self.freeze_timer = 0.0  # tracks how long timer freeze has left
 
         self.playeranimations = {
             "up":    [pygame.image.load(f"Assets/PlayerAnim/PlayerUp{i}.png").convert_alpha()    for i in range(1, 4)],
@@ -106,6 +108,9 @@ class Player:
         
         if self.score_boost_timer > 0: # count down score boost 
             self.score_boost_timer -= dt
+        
+        if self.freeze_timer > 0:
+            self.freeze_timer -= dt
 
         if self.velocity.length() > top_speed:
             self.velocity.scale_to_length(top_speed)

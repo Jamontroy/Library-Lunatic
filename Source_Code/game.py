@@ -9,7 +9,7 @@ from .player import Player
 from .bookshelves import Bookshelves
 from .collisions import Collisions
 from .hud import HUD
-from .powerup import Powerup, Bookmark
+from .powerup import Powerup, Bookmark, Hourglass
 import pygame
 
 class Game:
@@ -36,6 +36,7 @@ class Game:
         self.books = pygame.sprite.Group() # to track books
         self.powerups = pygame.sprite.Group()
         self.bookmarks = pygame.sprite.Group()
+        self.hourglasses = pygame.sprite.Group()
         self.sfx_music = pygame.mixer.Sound("Audio/music.wav")
         self.sfx_music.set_volume(0.15)
     
@@ -48,6 +49,7 @@ class Game:
                 self.books.empty()
                 self.powerups.empty()
                 self.bookmarks.empty()
+                self.hourglasses.empty()
                 self.hud.threebooks.clear()
                 self.player = Player(self.SCREEN_W, self.SCREEN_H)
                 self.sfx_music.play(-1)
@@ -64,7 +66,8 @@ class Game:
             self.player.update(dt)
             
             self.carrying = len(self.player.bookscarried) # uses the length of the list of books to see how many are carried
-            self.timer -= dt
+            if self.player.freeze_timer <= 0:
+                self.timer -= dt
             if self.timer <= 0:
                 self.timer = 0
                 self.sfx_music.stop()
@@ -74,19 +77,29 @@ class Game:
                 self.try_book_spawn()
                 self.try_powerup_spawn()
                 self.try_bookmark_spawn()
+                self.try_hourglass_spawn()
                 self.bspawn_timer = 0.0
+
             for powerup in list(self.powerups): #speed boost
                 if self.player.rect.colliderect(powerup.rect):
                     self.player.boost_timer = self.player.BOOST_DURATION
                     powerup.kill()
+
             for bookmark in list(self.bookmarks):#2x points
                 if self.player.rect.colliderect(bookmark.rect):
                     self.player.score_boost_timer = self.player.SCORE_BOOST_DURATION
                     bookmark.kill()
+
+            for hourglass in list(self.hourglasses):
+                if self.player.rect.colliderect(hourglass.rect):
+                    self.player.freeze_timer = self.player.FREEZE_DURATION
+                    hourglass.kill()
+
             score_gained = self.collisions.update(self.player, self.bookshelves, self.books, self.hud)
             if self.player.score_boost_timer > 0:
                 score_gained *= self.player.SCORE_MULTIPLIER
             self.player.score += score_gained  # was self.player.score += self.collisions.update before bookmark
+            self.timer += score_gained * 2  # add 2 seconds for each book returned
 
     '''
      I added this as a simple book spawner, however this definitely can change later depending on
@@ -107,7 +120,7 @@ class Game:
     def try_powerup_spawn(self) -> None:
         if len(self.powerups) > 0:  # only one powerup on screen at a time
             return
-        if random.random() > 0.2:  # 20% chance to spawn when called
+        if random.random() > 0.1:  # 20% chance to spawn when called
             return
         BORDER = 50
         x = random.randint(BORDER, self.SCREEN_W - BORDER)
@@ -122,7 +135,7 @@ class Game:
     def try_bookmark_spawn(self) -> None:
         if len(self.bookmarks) > 0:  # only one bookmark on screen at a time
             return
-        if random.random() > 0.15:  # 15% chance to spawn when called
+        if random.random() > 0.1:  # 15% chance to spawn when called
             return
         BORDER = 50
         x = random.randint(BORDER, self.SCREEN_W - BORDER)
@@ -134,6 +147,22 @@ class Game:
             new_bookmark.rect.center = (x, y)
         self.bookmarks.add(new_bookmark)
 
+    def try_hourglass_spawn(self) -> None:
+        if len(self.hourglasses) > 0:  
+            return
+        if random.random() > 0.1:  # 15% chance to spawn when called
+            return
+        BORDER = 60
+        x = random.randint(BORDER, self.SCREEN_W - BORDER)
+        y = random.randint(BORDER + 80, self.SCREEN_H - BORDER)
+        new_hourglass = Hourglass(center=(x, y))
+        while self.collisions.book_bs_col(new_hourglass, self.bookshelves):
+            x = random.randint(BORDER, self.SCREEN_W - BORDER)
+            y = random.randint(BORDER + 80, self.SCREEN_H - BORDER)
+            new_hourglass.rect.center = (x, y)
+        self.hourglasses.add(new_hourglass)
+    
+
 
     def draw(self)-> None:
         self.renderer.draw_game(self.player, self.bookshelves)
@@ -144,6 +173,8 @@ class Game:
             powerup.draw(self.screen)
         for bookmark in self.bookmarks:
             bookmark.draw(self.screen)
+        for hourglass in self.hourglasses:
+            hourglass.draw(self.screen)
         self.hud.draw(self.timer, self.player.score, self.carrying) #0 is a placeholder for carrying for now
         # Draw game over screen on top of everything
         if self.state == "gameover":
