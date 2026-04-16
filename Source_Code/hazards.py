@@ -2,7 +2,7 @@ import pygame
 
 class WetFloor(pygame.sprite.Sprite):
 
-  # class is meant to spawn wet static wet floors that the player slips on, stoppiung them for two seconds
+  # class is meant to spawn wet static wet floors that the player slips on, stoppiung them for two seconds.
 
     WIDTH = 30
     HEIGHT = 30

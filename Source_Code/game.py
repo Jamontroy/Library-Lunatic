@@ -188,7 +188,9 @@ class Game:
             y = random.randint(BORDER + 80, self.SCREEN_H - BORDER)
             new_hourglass.rect.center = (x, y)
         self.hourglasses.add(new_hourglass)
-    
+
+    # hazard spawners
+
     def try_WF_spawn(self) -> None:
         BORDER = 70
         x = random.randint(BORDER, self.SCREEN_W - BORDER)

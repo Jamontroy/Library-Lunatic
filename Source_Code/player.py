@@ -15,7 +15,7 @@ class Player:
     SCORE_BOOST_DURATION = 5.0  # seconds the score multiplier lasts
     SCORE_MULTIPLIER = 2        # how much the score is multiplied
     FREEZE_DURATION = 5.0  # seconds the timer freeze lasts
-    SLIP_DURATION = 2.0 # timing for the pause after slipping on the puddle
+    SLIP_DURATION = 2.0 # timing for the pause after slipping on the puddle.
 
     def __init__(self, SCREEN_W: int, SCREEN_H: int) -> None:
         self.w = SCREEN_W
