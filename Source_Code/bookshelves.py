@@ -36,7 +36,7 @@ class Bookshelves:
         self.bkshlf_green_sprite = pygame.transform.scale((pygame.image.load("Assets/GreenBookshelf.png").convert_alpha()), (SW, SH))
         self.bkshlf_yellow_sprite = pygame.transform.scale((pygame.image.load("Assets/YellowBookshelf.png").convert_alpha()), (SW, SH))
         self.bkshlf_purple_sprite = pygame.transform.scale((pygame.image.load("Assets/PurpleBookshelf.png").convert_alpha()), (SW, SH))
-        self.bkshlf_cream_sprite = pygame.transform.scale((pygame.image.load("Assets/CreamBookshelf.png").convert_alpha()), (SW, SH))
+        self.bkshlf_orange_sprite = pygame.transform.scale((pygame.image.load("Assets/OrangeBookshelf.png").convert_alpha()), (SW, SH))
         self.bkshlf_red_sprite = pygame.transform.scale((pygame.image.load("Assets/RedBookshelf.png").convert_alpha()), (SW, SH))
 
         self.bkshlf1 = pygame.Rect(COL_X[0], ROW_Y[0], SW, SH)
@@ -92,4 +92,4 @@ class Bookshelves:
         surface.blit(self.bkshlf_sprite, self.bkshlf9)
         surface.blit(self.bkshlf_purple_sprite, self.bkshlf10)
         surface.blit(self.bkshlf_sprite, self.bkshlf11)
-        surface.blit(self.bkshlf_cream_sprite, self.bkshlf12)
+        surface.blit(self.bkshlf_orange_sprite, self.bkshlf12)
