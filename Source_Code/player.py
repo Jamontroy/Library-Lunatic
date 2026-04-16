@@ -15,6 +15,7 @@ class Player:
     SCORE_BOOST_DURATION = 5.0  # seconds the score multiplier lasts
     SCORE_MULTIPLIER = 2        # how much the score is multiplied
     FREEZE_DURATION = 5.0  # seconds the timer freeze lasts
+    SLIP_DURATION = 2.0 # timing for the pause after slipping on the puddle
 
     def __init__(self, SCREEN_W: int, SCREEN_H: int) -> None:
         self.w = SCREEN_W
@@ -27,6 +28,8 @@ class Player:
         self.boost_timer = 0.0  # tracks how long boost has left
         self.score_boost_timer = 0.0  # tracks how long score boost has left
         self.freeze_timer = 0.0  # tracks how long timer freeze has left
+        self.slip_timer = 0.0  # tracks how long player is "slipped" for
+        self.is_slipping = False
 
         self.playeranimations = {
             "up":    [pygame.image.load(f"Assets/PlayerAnim/PlayerUp{i}.png").convert_alpha()    for i in range(1, 4)],
@@ -103,9 +106,23 @@ class Player:
         if self.boost_timer > 0:
             self.boost_timer -= dt
             top_speed = self.BOOSTED_SPEED
+        elif self.slip_timer > 0:
+            self.slip_timer -= dt
+            if self.slip_timer <= 0:
+                self.is_slipping = False
+            top_speed = 0.0
         else:
             top_speed = self.SPEED
-        
+
+        if self.slip_timer > 0:
+            self.slip_timer -= dt
+            self.velocity.update(0, 0)  # kill velocity
+            self.pos += self.velocity * dt
+            self.rect.center = (int(self.pos.x), int(self.pos.y))
+            self.rect.clamp_ip(pygame.Rect(45, 45 + 56, self.w - 90, self.h - 90 - 56))
+            self.pos.update(self.rect.center)
+            return  # skip all acceleration/movement this frame
+
         if self.score_boost_timer > 0: # count down score boost 
             self.score_boost_timer -= dt
         
