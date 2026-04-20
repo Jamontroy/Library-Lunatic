@@ -57,6 +57,33 @@ class Collisions:
                     hud.threebooks.remove(book)
             return dropped
 
+    def player_pedestrian_col(self, player: Player, ped) -> bool:
+        if not player.rect.colliderect(ped.rect):
+            return False
+
+        # Push player out using same logic as shelf collision
+        dx_left = player.rect.right - ped.rect.left
+        dx_right = ped.rect.right - player.rect.left
+        dy_top = player.rect.bottom - ped.rect.top
+        dy_bottom = ped.rect.bottom - player.rect.top
+
+        min_overlap = min(dx_left, dx_right, dy_top, dy_bottom)
+
+        if min_overlap == dx_left:
+            player.rect.right = ped.rect.left
+            player.velocity.x = 0
+        elif min_overlap == dx_right:
+            player.rect.left = ped.rect.right
+            player.velocity.x = 0
+        elif min_overlap == dy_top:
+            player.rect.bottom = ped.rect.top
+            player.velocity.y = 0
+        elif min_overlap == dy_bottom:
+            player.rect.top = ped.rect.bottom
+            player.velocity.y = 0
+
+        player.pos.update(player.rect.center)
+        return True  # tells game.py a collision happened so it can handle the timer + cooldown
 
     def book_bs_col(self, book: Book, bookshelves: Bookshelves) -> bool: # consolidates shelf collisions
         return (

@@ -8,7 +8,7 @@ from .palette import BOOK_TYPES, COLORS
 from .player import Player
 from .bookshelves import Bookshelves
 from .collisions import Collisions
-from .hud import HUD
+from .hud import HUD, FloatingText
 from .powerup import Powerup, Bookmark, Hourglass
 from .hazards import WetFloor, Pedestrian
 import pygame
@@ -43,6 +43,7 @@ class Game:
         self.pedestrians.add(Pedestrian(start_row=0, start_col=0))
         self.pedestrians.add(Pedestrian(start_row=3, start_col=4))
         self.pedestrians.add(Pedestrian(start_row=0, start_col=4))
+        self.floating_texts = []
         self.sfx_music = pygame.mixer.Sound("Audio/music.wav")
         self.sfx_music.set_volume(0.15)
     
@@ -62,6 +63,7 @@ class Game:
                 self.pedestrians.add(Pedestrian(start_row=3, start_col=4))
                 self.pedestrians.add(Pedestrian(start_row=0, start_col=4))
                 self.hud.threebooks.clear()
+                self.floating_texts.clear()
                 self.player = Player(self.SCREEN_W, self.SCREEN_H)
                 self.sfx_music.play(-1)
         if event.type == pygame.QUIT:
@@ -69,6 +71,8 @@ class Game:
         if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
             self.running = False
 
+    def spawn_text(self, x, y, text, color=(255, 0, 0)):
+        self.floating_texts.append(FloatingText(x, y, text, color))
 
     def update(self, dt: float) -> None:
         if self.state == "gameover":
@@ -117,11 +121,27 @@ class Game:
                 else:
                     self.player.is_slipping = False  # reset when no longer touching
 
+            for ft in list(self.floating_texts):
+                ft.update(dt)
+                if ft.is_dead():
+                    self.floating_texts.remove(ft)
+
             for ped in list(self.pedestrians):
                 occupied = {(other.row, other.col) for other in self.pedestrians if other is not ped}
                 ped.update(dt, occupied)
 
+                if ped.hit_cooldown > 0:
+                    ped.hit_cooldown -= dt
+
+                if self.collisions.player_pedestrian_col(self.player, ped):
+                    if ped.hit_cooldown <= 0:
+                        self.timer = max(0, self.timer - 5)
+                        ped.hit_cooldown = 2.0
+                        self.spawn_text(self.player.rect.centerx, self.player.rect.top, "-5 seconds")
+
             score_gained = self.collisions.update(self.player, self.bookshelves, self.books, self.hud)
+            for i in range(score_gained):
+                self.spawn_text(self.player.rect.centerx, self.player.rect.top - (i * 20), "+2 seconds", (0, 255, 0)) #makes it so when the player puts a book away the +2 seconds feedback can stack
             if self.player.score_boost_timer > 0:
                 score_gained *= self.player.SCORE_MULTIPLIER
             self.player.score += score_gained  # was self.player.score += self.collisions.update before bookmark
@@ -216,6 +236,9 @@ class Game:
             wf.draw(self.screen)
         for ped in self.pedestrians:
             ped.draw(self.screen)
+        for ft in self.floating_texts:
+            ft.draw(self.screen)
+
         self.hud.draw(self.timer, self.player.score, self.carrying, self.screen) #0 is a placeholder for carrying for now
         # Draw game over screen on top of everything
         if self.state == "gameover":

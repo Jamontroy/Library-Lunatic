@@ -42,6 +42,8 @@ class Pedestrian(pygame.sprite.Sprite):
     def __init__(self, start_row, start_col):
         super().__init__()
 
+        self.hit_cooldown = 0.0
+        
         self.row = start_row
         self.col = start_col
 

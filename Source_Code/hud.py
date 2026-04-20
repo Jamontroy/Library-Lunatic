@@ -62,3 +62,22 @@ class HUD:
             #updated from just showing the colored rects to pulling the sprite files from books.py
             box_rect = pygame.Rect(box_start_x + i * (box_size + 6), box_y, box_size, box_size)
             surface.blit(book.book_sprites[book.tag][0], box_rect)
+
+class FloatingText:
+    def __init__(self, x, y, text, color=(255, 0, 0)):
+        self.x = x
+        self.y = y
+        self.text = text
+        self.color = color
+        self.timer = 1.0
+        self.font = pygame.font.Font("Assets/Pixeled.ttf", 10)
+
+    def update(self, dt):
+        self.timer -= dt
+        self.y -= 40 * dt
+
+    def draw(self, surface):
+        surface.blit(self.font.render(self.text, True, self.color), (self.x, self.y))
+
+    def is_dead(self):
+        return self.timer <= 0
