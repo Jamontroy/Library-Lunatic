@@ -29,7 +29,7 @@ class Game:
         self.player = Player(self.SCREEN_W, self.SCREEN_H)
         self.bookshelves = Bookshelves()
         self.renderer = Renderer(self.screen)
-        self.timer = 60.0 # added for timer
+        self.timer = 30.0 # added for timer
         self.state = "start"  # for lose screen
         self.bspawn_timer = 0.0 # timer that tracks time in between book spawning times
         self.hud = HUD(self.screen, self.SCREEN_W) # added for hud
@@ -48,7 +48,7 @@ class Game:
         if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
             if self.state == "gameover" or self.state == "start":
                 self.state = "playing"
-                self.timer = 60.0
+                self.timer = 30.0
                 self.carrying = 0
                 self.books.empty()
                 self.powerups.empty()
@@ -233,7 +233,7 @@ class Game:
             wf.draw(self.screen)
         for kid in self.kids:
             kid.draw(self.screen)
-        self.hud.draw(self.timer, self.player.score, self.carrying) #0 is a placeholder for carrying for now
+        self.hud.draw(self.timer, self.player.score, self.carrying, self.screen) #0 is a placeholder for carrying for now
         # Draw game over screen on top of everything
         if self.state == "gameover":
             overlay = pygame.Surface((self.SCREEN_W, self.SCREEN_H), pygame.SRCALPHA)

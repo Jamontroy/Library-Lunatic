@@ -7,6 +7,15 @@ class Book(pygame.sprite.Sprite):
     def __init__(self, center, tag):
         super().__init__()
 
+        self.book_sprites = {
+            "red":    [pygame.transform.scale2x(pygame.image.load(f"Assets/RedBook.png").convert_alpha())],
+            "blue":  [pygame.transform.scale2x(pygame.image.load(f"Assets/BlueBook.png").convert_alpha())],
+            "green":  [pygame.transform.scale2x(pygame.image.load(f"Assets/GreenBook.png").convert_alpha())],
+            "yellow": [pygame.transform.scale2x(pygame.image.load(f"Assets/YellowBook.png").convert_alpha())],
+            "purple":  [pygame.transform.scale2x(pygame.image.load(f"Assets/PurpleBook.png").convert_alpha())],
+            "orange": [pygame.transform.scale2x(pygame.image.load(f"Assets/OrangeBook.png").convert_alpha())],
+        }
+
         # tag is the color of the book e.g. "red", "blue"
         # it needs to match a shelf tag to score a point
         self.tag = tag
@@ -14,11 +23,6 @@ class Book(pygame.sprite.Sprite):
         self.rect = pygame.Rect(0, 0, self.SIZE, self.SIZE)
         self.rect.center = center
 
-        # This is to get the book color from the palette
-        # BOOK_TYPES["red"] returns (book_color, shelf_color) so we grab index 0
-        book_color, shelf_color = BOOK_TYPES[tag]
-        self.color = book_color
-
+    #Replaced the former system with colored rects for actual book sprite
     def draw(self, surface):
-        pygame.draw.rect(surface, self.color, self.rect)
-        pygame.draw.rect(surface, pygame.Color("#000000"), self.rect, 2)
+        surface.blit(self.book_sprites[self.tag][0], self.rect)

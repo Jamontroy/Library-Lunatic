@@ -16,7 +16,7 @@ class HUD:
         s = self.font.render(text, True, color)
         self.screen.blit(s, pos)
  
-    def draw(self, timer, score, carrying):
+    def draw(self, timer, score, carrying, surface):
         # Draw the HUD panel at the top
         pygame.draw.rect(self.screen, COLORS.panel, pygame.Rect(0, 0, self.screen_w, 56))
  
@@ -59,6 +59,6 @@ class HUD:
         box_start_x = self.screen_w - 210
         for i in range(len(self.threebooks)):
             book = self.threebooks[i]
+            #updated from just showing the colored rects to pulling the sprite files from books.py
             box_rect = pygame.Rect(box_start_x + i * (box_size + 6), box_y, box_size, box_size)
-            pygame.draw.rect(self.screen, book.color, box_rect)
-            pygame.draw.rect(self.screen, pygame.Color("#000000"), box_rect, 2)
+            surface.blit(book.book_sprites[book.tag][0], box_rect)
