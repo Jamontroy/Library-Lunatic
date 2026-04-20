@@ -16,19 +16,20 @@ class HUD:
         s = self.font.render(text, True, color)
         self.screen.blit(s, pos)
  
-    def draw(self, timer, score, carrying, surface):
+    def draw(self, timer, score, carrying, surface, frozen=False):
         # Draw the HUD panel at the top
         pygame.draw.rect(self.screen, COLORS.panel, pygame.Rect(0, 0, self.screen_w, 56))
- 
-        # Timer turns red when low
-        if timer > 10:
+
+        # Score top left
+        self._draw_text(f"Score: {score}", (12, 10), COLORS.text)
+
+        if frozen:
+            timer_color = pygame.Color("#88c0d0")
+        elif timer > 10:
             timer_color = COLORS.hud_timer_ok
         else:
             timer_color = COLORS.hud_timer_low
- 
-        # Score top left
-        self._draw_text(f"Score: {score}", (12, 10), COLORS.text)
- 
+
         # Timer top center
         s = self.font.render(f"Time: {int(timer)}", True, timer_color)
         self.screen.blit(s, (self.screen_w // 2 - s.get_width() // 2, 10))
@@ -40,7 +41,9 @@ class HUD:
         bar_y = 32
         fill = int((timer / 60.0) * bar_width)
 
-        if timer > 30:
+        if frozen:
+            bar_color = pygame.Color("#88c0d0")
+        elif timer > 30:
             bar_color = pygame.Color("#a3be8c")  # green
         elif timer > 10:
             bar_color = pygame.Color("#ebcb8b")  # yellow

@@ -44,6 +44,7 @@ class Game:
         self.pedestrians.add(Pedestrian(start_row=3, start_col=4))
         self.pedestrians.add(Pedestrian(start_row=0, start_col=4))
         self.floating_texts = []
+        self.powerup_cooldown = 0.0
         self.sfx_music = pygame.mixer.Sound("Audio/music.wav")
         self.sfx_music.set_volume(0.15)
     
@@ -64,6 +65,7 @@ class Game:
                 self.pedestrians.add(Pedestrian(start_row=0, start_col=4))
                 self.hud.threebooks.clear()
                 self.floating_texts.clear()
+                self.powerup_cooldown = 0.0
                 self.player = Player(self.SCREEN_W, self.SCREEN_H)
                 self.sfx_music.play(-1)
         if event.type == pygame.QUIT:
@@ -87,7 +89,8 @@ class Game:
                 self.timer = 0
                 self.sfx_music.stop()
                 self.state = "gameover"
-            self.bspawn_timer += dt #
+            self.bspawn_timer += dt
+            self.powerup_cooldown += dt
             if self.bspawn_timer >= 3.00:
                 self.try_book_spawn()
                 self.try_powerup_spawn()
@@ -164,9 +167,11 @@ class Game:
         self.books.add(new_book)
 
     def try_powerup_spawn(self) -> None:
+        if self.powerup_cooldown < 9.0:
+            return
         if len(self.powerups) > 0:  # only one powerup on screen at a time
             return
-        if random.random() > 0.1:  # 20% chance to spawn when called
+        if random.random() > 0.15:  # 15% chance to spawn when called
             return
         BORDER = 70
         x = random.randint(BORDER, self.SCREEN_W - BORDER)
@@ -177,11 +182,14 @@ class Game:
             y = random.randint(BORDER + 80, self.SCREEN_H - BORDER)
             new_powerup.rect.center = (x, y)
         self.powerups.add(new_powerup)
+        self.powerup_cooldown = 0.0
     
     def try_bookmark_spawn(self) -> None:
+        if self.powerup_cooldown < 9.0:
+            return
         if len(self.bookmarks) > 0:  # only one bookmark on screen at a time
             return
-        if random.random() > 0.1:  # 15% chance to spawn when called
+        if random.random() > 0.2:  # 20% chance to spawn when called
             return
         BORDER = 50
         x = random.randint(BORDER, self.SCREEN_W - BORDER)
@@ -192,11 +200,14 @@ class Game:
             y = random.randint(BORDER + 80, self.SCREEN_H - BORDER)
             new_bookmark.rect.center = (x, y)
         self.bookmarks.add(new_bookmark)
+        self.powerup_cooldown = 0.0
 
     def try_hourglass_spawn(self) -> None:
-        if len(self.hourglasses) > 0:  
+        if self.powerup_cooldown < 9.0:
             return
-        if random.random() > 0.1:  # 15% chance to spawn when called
+        if len(self.hourglasses) > 0:
+            return
+        if random.random() > 0.20:  # 20% chance to spawn when called
             return
         BORDER = 60
         x = random.randint(BORDER, self.SCREEN_W - BORDER)
@@ -207,6 +218,7 @@ class Game:
             y = random.randint(BORDER + 80, self.SCREEN_H - BORDER)
             new_hourglass.rect.center = (x, y)
         self.hourglasses.add(new_hourglass)
+        self.powerup_cooldown = 0.0
 
     # hazard spawners
 
@@ -239,7 +251,7 @@ class Game:
         for ft in self.floating_texts:
             ft.draw(self.screen)
 
-        self.hud.draw(self.timer, self.player.score, self.carrying, self.screen) #0 is a placeholder for carrying for now
+        self.hud.draw(self.timer, self.player.score, self.carrying, self.screen, frozen=self.player.freeze_timer > 0) #0 is a placeholder for carrying for now
         # Draw game over screen on top of everything
         if self.state == "gameover":
             overlay = pygame.Surface((self.SCREEN_W, self.SCREEN_H), pygame.SRCALPHA)
