@@ -10,7 +10,7 @@ from .bookshelves import Bookshelves
 from .collisions import Collisions
 from .hud import HUD, FloatingText
 from .powerup import Powerup, Bookmark, Hourglass
-from .hazards import WetFloor, Pedestrian
+from .hazards import Pedestrian
 import pygame
 
 class Game:
@@ -38,7 +38,7 @@ class Game:
         self.powerups = pygame.sprite.Group()
         self.bookmarks = pygame.sprite.Group()
         self.hourglasses = pygame.sprite.Group()
-        self.wet_floors = pygame.sprite.Group()
+        # self.wet_floors = pygame.sprite.Group()
         self.pedestrians = pygame.sprite.Group()
         self.pedestrians.add(Pedestrian(start_row=0, start_col=0))
         self.pedestrians.add(Pedestrian(start_row=3, start_col=4))
@@ -58,7 +58,7 @@ class Game:
                 self.powerups.empty()
                 self.bookmarks.empty()
                 self.hourglasses.empty()
-                self.wet_floors.empty()
+                # self.wet_floors.empty()
                 self.pedestrians.empty()
                 self.pedestrians.add(Pedestrian(start_row=0, start_col=0))
                 self.pedestrians.add(Pedestrian(start_row=3, start_col=4))
@@ -96,7 +96,7 @@ class Game:
                 self.try_powerup_spawn()
                 self.try_bookmark_spawn()
                 self.try_hourglass_spawn()
-                self.try_WF_spawn()
+                #self.try_WF_spawn()
                 self.bspawn_timer = 0.0
 
             for powerup in list(self.powerups): #speed boost
@@ -114,15 +114,15 @@ class Game:
                     self.player.freeze_timer = self.player.FREEZE_DURATION
                     hourglass.kill()
 
-            for wf in list(self.wet_floors):
-                wf.update(dt)
-                if self.player.rect.colliderect(wf.rect):
-                    if not self.player.is_slipping:
-                        self.player.slip_timer = self.player.SLIP_DURATION
-                        self.player.is_slipping = True
-                        wf.kill()
-                else:
-                    self.player.is_slipping = False  # reset when no longer touching
+            # for wf in list(self.wet_floors):
+            #     wf.update(dt)
+            #     if self.player.rect.colliderect(wf.rect):
+            #         if not self.player.is_slipping:
+            #             self.player.slip_timer = self.player.SLIP_DURATION
+            #             self.player.is_slipping = True
+            #             wf.kill()
+            #     else:
+            #         self.player.is_slipping = False  # reset when no longer touching
 
             for ft in list(self.floating_texts):
                 ft.update(dt)
@@ -244,8 +244,8 @@ class Game:
             bookmark.draw(self.screen)
         for hourglass in self.hourglasses:
             hourglass.draw(self.screen)
-        for wf in self.wet_floors:
-            wf.draw(self.screen)
+        # for wf in self.wet_floors:
+        #     wf.draw(self.screen)
         for ped in self.pedestrians:
             ped.draw(self.screen)
         for ft in self.floating_texts:

@@ -12,6 +12,8 @@ class Collisions:
         self.sfx_bookDrop.set_volume(2)
         self.sfx_bookPickup = pygame.mixer.Sound("Audio/bookPickup.mp3")
         self.sfx_bookPickup.set_volume(0.5)
+        self.sfx_ped_hit = pygame.mixer.Sound("Audio/bookPickup.mp3")
+        self.sfx_ped_hit.set_volume(0.5)
 
     def player_shelf_col(self, player: pygame.Rect, bookshelf: pygame.Rect) -> None:
         if not player.rect.colliderect(bookshelf):

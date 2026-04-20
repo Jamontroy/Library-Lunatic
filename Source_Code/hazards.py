@@ -1,31 +1,31 @@
 import pygame
 import random
 
-class WetFloor(pygame.sprite.Sprite):
+# class WetFloor(pygame.sprite.Sprite):
 
-  # class is meant to spawn wet static wet floors that the player slips on, stoppiung them for two seconds.
+#   # class is meant to spawn wet static wet floors that the player slips on, stoppiung them for two seconds.
 
-    WIDTH = 30
-    HEIGHT = 30
-    LIFESPAN = 4.0
+#     WIDTH = 30
+#     HEIGHT = 30
+#     LIFESPAN = 4.0
 
-    def __init__(self, center):
-        super().__init__()
-        self.rect = pygame.Rect(0,0, self.WIDTH, self.HEIGHT)
-        self.rect.center = center
-        self.age = 0
+#     def __init__(self, center):
+#         super().__init__()
+#         self.rect = pygame.Rect(0,0, self.WIDTH, self.HEIGHT)
+#         self.rect.center = center
+#         self.age = 0
 
-    def update(self, dt):
-        self.age += dt
-        if self.age >= self.LIFESPAN:
-            self.kill()
+#     def update(self, dt):
+#         self.age += dt
+#         if self.age >= self.LIFESPAN:
+#             self.kill()
 
-    def draw(self, screen):
-        # Placeholder visual: a semi-transparent blue rectangle
-        surf = pygame.Surface((self.WIDTH, self.HEIGHT), pygame.SRCALPHA)
-        surf.fill((100, 149, 237, 120))  # cornflower blue, semi-transparent
-        screen.blit(surf, self.rect)
-        pygame.draw.rect(screen, pygame.Color("#5588cc"), self.rect, 2)
+#     def draw(self, screen):
+#         # Placeholder visual: a semi-transparent blue rectangle
+#         surf = pygame.Surface((self.WIDTH, self.HEIGHT), pygame.SRCALPHA)
+#         surf.fill((100, 149, 237, 120))  # cornflower blue, semi-transparent
+#         screen.blit(surf, self.rect)
+#         pygame.draw.rect(screen, pygame.Color("#5588cc"), self.rect, 2)
 
 # AI walkable grid cell centers (5 cols x 4 rows = 20 spots)
 # These are the midpoints of the corridors between/around the shelves
