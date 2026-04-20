@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import random
-from socket import send_fds
 
 from .books import Book
 from .draw import Renderer
@@ -11,7 +10,7 @@ from .bookshelves import Bookshelves
 from .collisions import Collisions
 from .hud import HUD
 from .powerup import Powerup, Bookmark, Hourglass
-from.hazards import WetFloor, Kid
+from .hazards import WetFloor, Pedestrian
 import pygame
 
 class Game:
@@ -40,7 +39,10 @@ class Game:
         self.bookmarks = pygame.sprite.Group()
         self.hourglasses = pygame.sprite.Group()
         self.wet_floors = pygame.sprite.Group()
-        self.kids = pygame.sprite.Group()
+        self.pedestrians = pygame.sprite.Group()
+        self.pedestrians.add(Pedestrian(start_row=0, start_col=0))
+        self.pedestrians.add(Pedestrian(start_row=3, start_col=4))
+        self.pedestrians.add(Pedestrian(start_row=0, start_col=4))
         self.sfx_music = pygame.mixer.Sound("Audio/music.wav")
         self.sfx_music.set_volume(0.15)
     
@@ -55,7 +57,10 @@ class Game:
                 self.bookmarks.empty()
                 self.hourglasses.empty()
                 self.wet_floors.empty()
-                self.kids.empty()
+                self.pedestrians.empty()
+                self.pedestrians.add(Pedestrian(start_row=0, start_col=0))
+                self.pedestrians.add(Pedestrian(start_row=3, start_col=4))
+                self.pedestrians.add(Pedestrian(start_row=0, start_col=4))
                 self.hud.threebooks.clear()
                 self.player = Player(self.SCREEN_W, self.SCREEN_H)
                 self.sfx_music.play(-1)
@@ -85,7 +90,6 @@ class Game:
                 self.try_bookmark_spawn()
                 self.try_hourglass_spawn()
                 self.try_WF_spawn()
-                self.try_kid_spawn()
                 self.bspawn_timer = 0.0
 
             for powerup in list(self.powerups): #speed boost
@@ -113,14 +117,9 @@ class Game:
                 else:
                     self.player.is_slipping = False  # reset when no longer touching
 
-            for kid in list(self.kids):
-                kid.update(dt)
-                if self.player.rect.colliderect(kid.rect):
-                    if len(self.player.bookscarried) > 0:
-                        stolen = self.player.bookscarried.pop()
-                        if stolen in self.hud.threebooks:
-                            self.hud.threebooks.remove(stolen)
-                    kid.kill()
+            for ped in list(self.pedestrians):
+                occupied = {(other.row, other.col) for other in self.pedestrians if other is not ped}
+                ped.update(dt, occupied)
 
             score_gained = self.collisions.update(self.player, self.bookshelves, self.books, self.hud)
             if self.player.score_boost_timer > 0:
@@ -202,22 +201,6 @@ class Game:
             new_WF.rect.center = (x, y)
         self.wet_floors.add(new_WF)
 
-    def try_kid_spawn(self) -> None:
-        if len(self.kids) >= 2:
-            return
-        if random.random() > 0.20:
-            return
-        BORDER = 70
-        x = random.randint(BORDER, self.SCREEN_W - BORDER)
-        y = random.randint(BORDER + 80, self.SCREEN_H - BORDER)
-        new_kid = Kid(center=(x, y))
-        while self.collisions.book_bs_col(new_kid, self.bookshelves):
-            x = random.randint(BORDER, self.SCREEN_W - BORDER)
-            y = random.randint(BORDER + 80, self.SCREEN_H - BORDER)
-            new_kid.rect.center = (x, y)
-        self.kids.add(new_kid)
-
-
     def draw(self)-> None:
         self.renderer.draw_game(self.player, self.bookshelves)
         # Draw the HUD with the current timer score and number of books being carried
@@ -231,8 +214,8 @@ class Game:
             hourglass.draw(self.screen)
         for wf in self.wet_floors:
             wf.draw(self.screen)
-        for kid in self.kids:
-            kid.draw(self.screen)
+        for ped in self.pedestrians:
+            ped.draw(self.screen)
         self.hud.draw(self.timer, self.player.score, self.carrying, self.screen) #0 is a placeholder for carrying for now
         # Draw game over screen on top of everything
         if self.state == "gameover":
