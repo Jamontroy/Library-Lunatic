@@ -45,6 +45,15 @@ class Game:
         self.pedestrians.add(Pedestrian(start_row=0, start_col=4))
         self.floating_texts = []
         self.powerup_cooldown = 0.0
+        self.high_score = 0
+        self.end_quote = ""
+        self.QUOTES = [
+            "Shhhhhhhhhhhhhhhhh!",
+            "Please do not run in the library.",
+            "Your library card has been revoked.",
+            "Return your books on the way out!",
+            "Next time try an audiobook.",
+        ]
         self.sfx_music = pygame.mixer.Sound("Audio/music.wav")
         self.sfx_music.set_volume(0.15)
     
@@ -89,6 +98,9 @@ class Game:
                 self.timer = 0
                 self.sfx_music.stop()
                 self.state = "gameover"
+                if self.player.score > self.high_score:
+                    self.high_score = self.player.score
+                self.end_quote = random.choice(self.QUOTES)
             self.bspawn_timer += dt
             self.powerup_cooldown += dt
             if self.bspawn_timer >= 3.00:
@@ -257,12 +269,29 @@ class Game:
             overlay = pygame.Surface((self.SCREEN_W, self.SCREEN_H), pygame.SRCALPHA)
             overlay.fill((0, 0, 0, 150))
             self.screen.blit(overlay, (0, 0))
-            big_font = pygame.font.SysFont(None, 64)
+            panel = pygame.Surface((480, 220), pygame.SRCALPHA)
+            panel.fill((0, 0, 0, 180))
+            self.screen.blit(panel, (self.SCREEN_W // 2 - 240, self.SCREEN_H // 2 - 110))
+            big_font = pygame.font.Font("Assets/Pixeled.ttf", 50)
             small_font = pygame.font.SysFont(None, 32)
-            s = big_font.render("Game Over!", True, COLORS.text)
-            self.screen.blit(s, (self.SCREEN_W // 2 - s.get_width() // 2, self.SCREEN_H // 2 - 40))
+            s = big_font.render("Game Over!", True, pygame.Color("#ff1a1a"))
+            s_shadow = big_font.render("Game Over!", True, pygame.Color("#000000"))
+            sx = self.SCREEN_W // 2 - s.get_width() // 2 + 5
+            sy = self.SCREEN_H // 2 - 130
+            self.screen.blit(s_shadow, (sx + 3, sy + 3))
+            self.screen.blit(s, (sx, sy))
+            score_text = small_font.render(f"Final Score: {self.player.score}", True, COLORS.text)
+            self.screen.blit(score_text, (self.SCREEN_W // 2 - score_text.get_width() // 2, self.SCREEN_H // 2))
+            hs_text = small_font.render(f"Best: {self.high_score}", True, pygame.Color("#ebcb8b"))
+            self.screen.blit(hs_text, (self.SCREEN_W // 2 - hs_text.get_width() // 2, self.SCREEN_H // 2 + 35))
             r = small_font.render("Press Space to play again", True, COLORS.subtle)
-            self.screen.blit(r, (self.SCREEN_W // 2 - r.get_width() // 2, self.SCREEN_H // 2 + 20))
+            self.screen.blit(r, (self.SCREEN_W // 2 - r.get_width() // 2, self.SCREEN_H // 2 + 70))
+            quote_panel = pygame.Surface((480, 35), pygame.SRCALPHA)
+            quote_panel.fill((0, 0, 0, 180))
+            self.screen.blit(quote_panel, (self.SCREEN_W // 2 - 240, self.SCREEN_H // 2 + 298))
+            quote_font = pygame.font.SysFont(None, 24)
+            q = quote_font.render(f'"{self.end_quote}"', True, COLORS.subtle)
+            self.screen.blit(q, (self.SCREEN_W // 2 - q.get_width() // 2, self.SCREEN_H // 2 + 307))
             
         if self.state == "start":
             overlay = pygame.Surface((self.SCREEN_W, self.SCREEN_H), pygame.SRCALPHA)
