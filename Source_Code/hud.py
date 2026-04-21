@@ -10,13 +10,17 @@ class HUD:
         self.font = pygame.font.SysFont(None, 22)
         self.rect = pygame.Rect(0, 0, screen_w, 56)
         self.threebooks = []
-        self.threeboxes = pygame.sprite.Group();
+        self.threeboxes = pygame.sprite.Group()
+        icon_size = (32, 32)
+        self.icon_speed = pygame.transform.scale(pygame.image.load("Assets/SpeedBoots.png").convert_alpha(), icon_size)
+        self.icon_2x = pygame.transform.scale(pygame.image.load("Assets/X2.png").convert_alpha(), icon_size)
+        self.icon_freeze = pygame.transform.scale(pygame.image.load("Assets/Hourglass.png").convert_alpha(), icon_size)
  
     def _draw_text(self, text, pos, color):
         s = self.font.render(text, True, color)
         self.screen.blit(s, pos)
  
-    def draw(self, timer, score, carrying, surface, frozen=False):
+    def draw(self, timer, score, carrying, surface, frozen=False, boosted=False, score_boosted=False):
         # Draw the HUD panel at the top
         pygame.draw.rect(self.screen, COLORS.panel, pygame.Rect(0, 0, self.screen_w, 56))
 
@@ -65,6 +69,16 @@ class HUD:
             #updated from just showing the colored rects to pulling the sprite files from books.py
             box_rect = pygame.Rect(box_start_x + i * (box_size + 6), box_y, box_size, box_size)
             surface.blit(book.book_sprites[book.tag][0], box_rect)
+
+        active_icons = []
+        if boosted:
+            active_icons.append(self.icon_speed)
+        if score_boosted:
+            active_icons.append(self.icon_2x)
+        if frozen:
+            active_icons.append(self.icon_freeze)
+        for i, icon in enumerate(active_icons):
+            surface.blit(icon, (self.screen_w - 80 - i * 36, 12))
 
 class FloatingText:
     def __init__(self, x, y, text, color=(255, 0, 0)):
