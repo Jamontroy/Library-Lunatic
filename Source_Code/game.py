@@ -152,9 +152,10 @@ class Game:
                     if ped.hit_cooldown <= 0:
                         self.timer = max(0, self.timer - 5)
                         ped.hit_cooldown = 2.0
+
                         self.spawn_text(self.player.rect.centerx, self.player.rect.top, "-5 seconds")
 
-            score_gained = self.collisions.update(self.player, self.bookshelves, self.books, self.hud)
+            score_gained = self.collisions.update(self.player, self.bookshelves, self.books, self.hud, self.pedestrians, dt)
             for i in range(score_gained):
                 self.spawn_text(self.player.rect.centerx, self.player.rect.top - (i * 20), "+2 seconds", (0, 255, 0)) #makes it so when the player puts a book away the +2 seconds feedback can stack
             if self.player.score_boost_timer > 0:

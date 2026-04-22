@@ -12,8 +12,18 @@ class Collisions:
         self.sfx_bookDrop.set_volume(2)
         self.sfx_bookPickup = pygame.mixer.Sound("Audio/bookPickup.mp3")
         self.sfx_bookPickup.set_volume(0.5)
-        self.sfx_ped_hit = pygame.mixer.Sound("Audio/bookPickup.mp3")
+        self.sfx_ped_hit = pygame.mixer.Sound("Audio/PedCol.mp3")
         self.sfx_ped_hit.set_volume(0.5)
+
+        # Cooldown tracker for any sound that needs one
+        self.sfx_cooldowns = {
+            "ped_hit": 0.0,
+        }
+
+    def play_sfx(self, key, sound, cooldown=1.0): #I had to add this because all of the other sound effects were already conditional. This has the opportunity to infinitely replay so I needed to add a cooldown loop
+        if self.sfx_cooldowns[key] <= 0:
+            sound.play()
+            self.sfx_cooldowns[key] = cooldown
 
     def player_shelf_col(self, player: pygame.Rect, bookshelf: pygame.Rect) -> None:
         if not player.rect.colliderect(bookshelf):
@@ -40,7 +50,6 @@ class Collisions:
             player.velocity.y = 0
 
         player.pos.update(player.rect.center)
-
 
     '''
     this deals with the part of the player-shelf collision when the player has the correct book. It passes
@@ -84,6 +93,8 @@ class Collisions:
             player.rect.top = ped.rect.bottom
             player.velocity.y = 0
 
+        self.play_sfx("ped_hit", self.sfx_ped_hit, cooldown=2.0)
+
         player.pos.update(player.rect.center)
         return True  # tells game.py a collision happened so it can handle the timer + cooldown
 
@@ -122,10 +133,14 @@ class Collisions:
             self.sfx_bookPickup.play()
             book.kill() # despawns book from game
 
-
     # I changed the type hinting to int for the purposes of adding to the "carrying" value in game
-    def update(self, player: Player, bookshelves: Bookshelves, books: pygame.sprite.Group, hud: HUD) -> int:
+    def update(self, player: Player, bookshelves: Bookshelves, books: pygame.sprite.Group, hud: HUD, pedestrians: pygame.sprite.Group, dt: float) -> int:
         score_add = 0
+
+        # Tick down all sfx cooldowns
+        for key in self.sfx_cooldowns:
+            self.sfx_cooldowns[key] -= dt
+
         self.player_shelf_col(player, bookshelves.bkshlf1)
         self.player_shelf_col(player, bookshelves.bkshlf2)
         self.player_shelf_col(player, bookshelves.bkshlf3)
