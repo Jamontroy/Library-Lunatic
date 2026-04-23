@@ -18,7 +18,21 @@ Carried books persisting across-restart bug fix
 Worked on some bugs and fixes throughout and helped with random stuff
 Primary author of G3 writeup (sections 0–5)
 
+James Knott:
 
+G4 (packaging & final build):
+
+postmortem.md (final comments on project, tuning examples, etc.)
+
+Since Week 7:
+
+Implemented collision rules with books, and bookshelves
+Created simple array-based inventory system for books collected and returned
+Created score system based on books returned from inventory
+Added text-based inventory tracker on HUD (later improved on by Mazen)
+Created base spawning system (initally for books, implemented by powerups)
+Implemented initial hazards: wet floor and kid (only kept kid, which was developed into pedestrian by Joe)
+Miscellaneous contributions to G1/G2/G3 docs
 
 Joe Montroy:
 
