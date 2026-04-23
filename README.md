@@ -26,7 +26,7 @@ Can control the character using WASD or arrow keys:
     Quit:      Esc or close window
 
 Pickups / interactions are automatic on contact:
-    Walk over a book to pick it up (carry up to 2)
+    Walk over a book to pick it up (carry up to 3)
     Walk into a matching-color shelf to deliver all carried books of that color
     Walk over a powerup to activate it
     Bumping a pedestrian hazard costs 5 seconds
@@ -48,10 +48,10 @@ Code — Joe Montroy, Mazen Malas, James Knott
 
 Sprites & pixel art — Joe Montroy (original work)
 
-music.wav — background loop (source: TODO change)
-bookPickup.mp3 — book pickup SFX (source: TODO change)
-BookDropOff.wav — book delivery SFX (source: TODO change)
-lolo_s-power-up-474087.mp3 — powerup pickup SFX (source: TODO change)
-u_n2rdb8hxnh-incorrect-293358.mp3 — incorrect/wrong delivery SFX (source: TODO change)
-PedCol.mp3 — pedestrian collision SFX (source: TODO confirm)
-timerCountdown.wav — final-seconds countdown SFX (source: TODO change)
+music.wav — background loop (source: pixabay)
+bookPickup.mp3 — book pickup SFX (source: pixabay)
+BookDropOff.wav — book delivery SFX (source: pixabay)
+lolo_s-power-up-474087.mp3 — powerup pickup SFX (source: pixabay)
+u_n2rdb8hxnh-incorrect-293358.mp3 — incorrect/wrong delivery SFX (source: pixabay)
+PedCol.mp3 — pedestrian collision SFX (source: pixabay)
+timerCountdown.wav — final-seconds countdown SFX (source: pixabay)
