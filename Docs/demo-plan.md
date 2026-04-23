@@ -1,6 +1,7 @@
 ## Demo Plan
 
 First start with Joes video which will go over some of what he worked on
+youtube.com/watch?v=jfcuJP6i6wE&feature=youtu.be
 
 Title card & pitch — Open on the title screen and give pitch: "Library Lunatic is an Overcooked style time attack where you sort color coded books before the timer runs out to get a high score."
 
