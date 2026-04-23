@@ -30,6 +30,7 @@ Sprite scaling + animation frame debugging during final polish
 Since Week 7:
 
 All original sprite work: player walk animations (4 directions), bookshelves (6 colored + cream/basic variants), powerup icons (Speed Boots, Bookmark, Hourglass), background art
+Wrote the AI for the pedestrians
 Player walk animation integration in player.py
 Hitbox tuning + debugging passes
 Weeks 7–12 contributions to G1/G2/G3 writeups (verify which sections)
