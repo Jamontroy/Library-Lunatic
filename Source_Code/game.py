@@ -56,6 +56,9 @@ class Game:
         ]
         self.sfx_music = pygame.mixer.Sound("Audio/music.wav")
         self.sfx_music.set_volume(0.15)
+        
+        self.sfx_powerup = pygame.mixer.Sound("Audio/lolo_s-power-up-474087.mp3")
+        self.sfx_powerup.set_volume(0.25)
     
     def handle_event(self, event: pygame.event.Event) -> None:
         if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
@@ -113,16 +116,19 @@ class Game:
 
             for powerup in list(self.powerups): #speed boost
                 if self.player.rect.colliderect(powerup.rect):
+                    self.sfx_powerup.play() 
                     self.player.boost_timer = self.player.BOOST_DURATION
                     powerup.kill()
 
             for bookmark in list(self.bookmarks):#2x points
                 if self.player.rect.colliderect(bookmark.rect):
+                    self.sfx_powerup.play()
                     self.player.score_boost_timer = self.player.SCORE_BOOST_DURATION
                     bookmark.kill()
 
             for hourglass in list(self.hourglasses):
                 if self.player.rect.colliderect(hourglass.rect):
+                    self.sfx_powerup.play()
                     self.player.freeze_timer = self.player.FREEZE_DURATION
                     hourglass.kill()
 
